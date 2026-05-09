@@ -8,1006 +8,813 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
 <meta name="apple-mobile-web-app-title" content="AI Jobs"/>
 <meta name="theme-color" content="#1a6ef5"/>
-<meta name="description" content="AI-powered job hunting machine for India — upload resume, get matched jobs instantly"/>
-<title>AI Recruiter India</title>
-
-<!-- PWA Manifest inline as data URI -->
+<title>AI Recruiter India — Truly Dynamic</title>
 <link rel="manifest" href="data:application/json,%7B%22name%22%3A%22AI+Recruiter+India%22%2C%22short_name%22%3A%22AI+Jobs%22%2C%22start_url%22%3A%22.%2F%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%2306090f%22%2C%22theme_color%22%3A%22%231a6ef5%22%7D"/>
-
 <style>
-/* ── FONTS via @font-face data-embedded system fonts fallback ── */
-* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-
 :root {
-  --bg: #06090f;
-  --bg2: #0d1320;
-  --bg3: #111827;
-  --surface: #141c2e;
-  --surface2: #1a2540;
-  --border: rgba(255,255,255,0.08);
-  --border2: rgba(255,255,255,0.14);
-  --accent: #1a6ef5;
-  --accent2: #3b82f6;
-  --accent-glow: rgba(26,110,245,0.25);
-  --gold: #f59e0b;
-  --green: #10b981;
-  --red: #ef4444;
-  --text: #f1f5f9;
-  --text2: #94a3b8;
-  --text3: #64748b;
-  --font-head: -apple-system, 'SF Pro Display', 'Segoe UI', system-ui, sans-serif;
-  --font-body: -apple-system, 'SF Pro Text', 'Segoe UI', system-ui, sans-serif;
-  --r: 14px;
-  --r2: 20px;
-  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --bg:#06090f; --bg2:#0d1320; --surface:#141c2e; --surface2:#1a2540;
+  --border:rgba(255,255,255,0.08); --border2:rgba(255,255,255,0.14);
+  --accent:#1a6ef5; --accent2:#3b82f6; --green:#10b981; --gold:#f59e0b; --red:#ef4444;
+  --text:#f1f5f9; --text2:#94a3b8; --text3:#64748b;
+  --font:-apple-system,'Segoe UI',system-ui,sans-serif;
+  --r:14px; --r2:20px; --safe-bottom:env(safe-area-inset-bottom,0px);
 }
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);font-family:var(--font);}
+#app{display:flex;flex-direction:column;height:100vh;height:100dvh;overflow:hidden;}
 
-html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(--text); font-family: var(--font-body); }
+#hdr{flex-shrink:0;padding:calc(14px + env(safe-area-inset-top,0px)) 18px 12px;background:var(--bg);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.hlogo{display:flex;align-items:center;gap:10px;}
+.hicon{width:36px;height:36px;background:var(--accent);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;}
+.htitle{font-size:16px;font-weight:700;}
+.hsub{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;margin-top:1px;}
+#ibtn{background:var(--accent);color:#fff;border:none;padding:7px 13px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;display:none;gap:5px;align-items:center;}
+#ibtn.vis{display:flex;}
 
-/* ── APP SHELL ── */
-#app { display: flex; flex-direction: column; height: 100vh; height: 100dvh; overflow: hidden; }
+#screens{flex:1;overflow:hidden;position:relative;}
+.scr{position:absolute;inset:0;overflow-y:auto;-webkit-overflow-scrolling:touch;opacity:0;pointer-events:none;transition:opacity .2s;padding-bottom:calc(74px + var(--safe-bottom));}
+.scr.on{opacity:1;pointer-events:all;}
 
-#header {
-  flex-shrink: 0; padding: 14px 20px 12px;
-  background: var(--bg); border-bottom: 1px solid var(--border);
-  display: flex; align-items: center; justify-content: space-between;
-  padding-top: calc(14px + env(safe-area-inset-top, 0px));
-}
-.header-logo { display: flex; align-items: center; gap: 10px; }
-.logo-icon {
-  width: 36px; height: 36px; background: var(--accent); border-radius: 10px;
-  display: flex; align-items: center; justify-content: center; font-size: 20px;
-}
-.logo-text { font-size: 16px; font-weight: 700; letter-spacing: -0.3px; }
-.logo-sub { font-size: 10px; color: var(--text3); letter-spacing: 0.06em; text-transform: uppercase; margin-top: 1px; }
-#install-btn {
-  background: var(--accent); color: #fff; border: none; padding: 8px 14px;
-  border-radius: 20px; font-size: 12px; font-weight: 600; cursor: pointer;
-  display: none; align-items: center; gap: 5px;
-}
-#install-btn.visible { display: flex; }
+#nav{flex-shrink:0;background:var(--bg2);border-top:1px solid var(--border);display:flex;padding-bottom:var(--safe-bottom);}
+.nb{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:9px 4px 8px;gap:3px;border:none;background:transparent;color:var(--text3);cursor:pointer;font-family:var(--font);transition:color .15s;}
+.nb.on{color:var(--accent2);}
+.ni{font-size:19px;line-height:1;}
+.nl{font-size:10px;font-weight:600;}
 
-/* ── SCREENS ── */
-#screens { flex: 1; overflow: hidden; position: relative; }
-.screen {
-  position: absolute; inset: 0; overflow-y: auto; -webkit-overflow-scrolling: touch;
-  opacity: 0; pointer-events: none; transition: opacity 0.22s;
-  padding-bottom: calc(76px + var(--safe-bottom));
-}
-.screen.active { opacity: 1; pointer-events: all; }
+/* HOME */
+.hero{padding:24px 18px 18px;background:linear-gradient(155deg,var(--bg2),var(--bg));position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;top:-50px;right:-30px;width:200px;height:200px;background:radial-gradient(circle,rgba(26,110,245,.2),transparent 70%);pointer-events:none;}
+.live-pill{display:inline-flex;align-items:center;gap:6px;background:rgba(26,110,245,.1);border:1px solid rgba(26,110,245,.25);border-radius:20px;padding:4px 12px;font-size:11px;color:var(--accent2);margin-bottom:12px;}
+.ldot{width:6px;height:6px;background:var(--green);border-radius:50%;animation:blink 2s infinite;}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:.3;}}
+.htxt{font-size:26px;font-weight:800;line-height:1.22;margin-bottom:7px;letter-spacing:-.5px;}
+.htxt span{color:var(--accent2);}
+.hsub2{font-size:13px;color:var(--text2);line-height:1.65;}
 
-/* ── BOTTOM NAV ── */
-#nav {
-  flex-shrink: 0; background: var(--bg2); border-top: 1px solid var(--border);
-  display: flex; padding-bottom: var(--safe-bottom);
-}
-.nav-btn {
-  flex: 1; display: flex; flex-direction: column; align-items: center;
-  justify-content: center; padding: 9px 4px; gap: 4px;
-  border: none; background: transparent; color: var(--text3);
-  cursor: pointer; font-family: var(--font-body); transition: color 0.15s;
-}
-.nav-btn.active { color: var(--accent2); }
-.nav-icon { font-size: 19px; line-height: 1; }
-.nav-label { font-size: 10px; font-weight: 600; letter-spacing: 0.02em; }
+/* API KEY BOX */
+.apibox{margin:14px 16px 0;background:rgba(245,158,11,.07);border:1px solid rgba(245,158,11,.22);border-radius:var(--r2);padding:14px 16px;}
+.apibox h4{font-size:13px;font-weight:700;color:#fbbf24;margin-bottom:6px;}
+.apibox p{font-size:12px;color:var(--text3);line-height:1.6;margin-bottom:8px;}
+.apibox input{width:100%;background:var(--surface2);border:1px solid var(--border2);border-radius:10px;padding:10px 13px;font-size:13px;color:var(--text);font-family:var(--font);outline:none;}
+.apibox input:focus{border-color:var(--gold);}
+.apibox input::placeholder{color:var(--text3);}
+.apilink{font-size:11px;color:var(--accent2);margin-top:6px;display:block;text-decoration:none;}
 
-/* ── HOME SCREEN ── */
-.home-hero {
-  padding: 26px 20px 20px;
-  background: linear-gradient(160deg, var(--bg2) 0%, var(--bg) 100%);
-  position: relative; overflow: hidden;
-}
-.home-hero::before {
-  content: ''; position: absolute; top: -60px; right: -40px;
-  width: 220px; height: 220px;
-  background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
-  pointer-events: none;
-}
-.live-badge {
-  display: inline-flex; align-items: center; gap: 6px;
-  background: rgba(26,110,245,0.12); border: 1px solid rgba(26,110,245,0.28);
-  border-radius: 20px; padding: 4px 12px; font-size: 11px;
-  color: var(--accent2); margin-bottom: 14px; letter-spacing: 0.04em;
-}
-.live-dot { width: 6px; height: 6px; background: var(--green); border-radius: 50%; animation: blink 2s infinite; }
-@keyframes blink { 0%,100%{opacity:1;} 50%{opacity:0.3;} }
-.hero-title { font-size: 27px; font-weight: 800; line-height: 1.22; margin-bottom: 8px; letter-spacing: -0.6px; }
-.hero-title span { color: var(--accent2); }
-.hero-sub { font-size: 13px; color: var(--text2); line-height: 1.65; }
+/* UPLOAD */
+.upcard{margin:14px 16px 0;background:var(--surface);border:1.5px dashed var(--border2);border-radius:var(--r2);padding:24px 18px;text-align:center;cursor:pointer;transition:all .2s;}
+.upcard.drag{border-color:var(--accent);background:rgba(26,110,245,.07);}
+.upcard.ready{border-style:solid;border-color:var(--green);background:rgba(16,185,129,.05);}
+.upico{font-size:40px;display:block;margin-bottom:10px;}
+.uptitle{font-size:16px;font-weight:700;margin-bottom:5px;}
+.upsub{font-size:12px;color:var(--text3);}
+#fi{display:none;}
+.fbadge{display:none;align-items:center;gap:10px;margin-top:12px;background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.25);border-radius:10px;padding:10px 13px;text-align:left;}
+.fbadge.show{display:flex;}
+.fname{font-size:13px;font-weight:600;color:#34d399;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.fsize{font-size:11px;color:var(--text3);}
 
-/* How-it-works pills */
-.how-row { display: flex; gap: 8px; padding: 14px 16px 0; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
-.how-row::-webkit-scrollbar { display: none; }
-.how-pill {
-  flex-shrink: 0; background: var(--surface); border: 1px solid var(--border);
-  border-radius: 12px; padding: 10px 14px; text-align: center; min-width: 90px;
-}
-.how-pill-icon { font-size: 20px; margin-bottom: 5px; }
-.how-pill-text { font-size: 11px; color: var(--text3); line-height: 1.4; font-weight: 500; }
+/* FORM */
+.fwrap{padding:13px 16px 0;}
+.flabel{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px;display:block;}
+.finput{width:100%;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:12px 15px;font-size:14px;color:var(--text);font-family:var(--font);outline:none;-webkit-appearance:none;margin-bottom:12px;}
+.finput:focus{border-color:var(--accent);}
+.finput::placeholder{color:var(--text3);}
+.echips{display:flex;gap:8px;margin-bottom:14px;}
+.echip{flex:1;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:10px 4px;text-align:center;font-size:12px;font-weight:600;color:var(--text2);cursor:pointer;transition:all .15s;}
+.echip.on{background:rgba(26,110,245,.14);border-color:var(--accent);color:var(--accent2);}
+.gobtn{width:100%;padding:15px;background:var(--accent);color:#fff;border:none;border-radius:var(--r2);font-size:15px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .2s;margin-bottom:14px;}
+.gobtn:active{transform:scale(.98);}
+.gobtn:disabled{background:var(--surface2);color:var(--text3);cursor:not-allowed;transform:none;}
 
-/* Upload card */
-.upload-card {
-  margin: 14px 16px 0; background: var(--surface);
-  border: 1.5px dashed var(--border2); border-radius: var(--r2);
-  padding: 26px 20px; text-align: center; cursor: pointer; transition: all 0.2s;
-}
-.upload-card.drag { border-color: var(--accent); background: rgba(26,110,245,0.07); }
-.upload-card.has-file { border-style: solid; border-color: var(--green); background: rgba(16,185,129,0.05); }
-.upload-big-icon { font-size: 42px; display: block; margin-bottom: 10px; }
-.upload-title { font-size: 16px; font-weight: 700; margin-bottom: 5px; }
-.upload-sub { font-size: 12px; color: var(--text3); }
-#fileInput { display: none; }
+/* PROGRESS */
+.phero{padding:40px 22px 22px;text-align:center;}
+.spinwrap{width:74px;height:74px;margin:0 auto 18px;position:relative;}
+.spinsvg{animation:spin 1.3s linear infinite;width:74px;height:74px;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.spinpct{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800;color:var(--accent2);}
+.ptitle{font-size:21px;font-weight:800;margin-bottom:5px;}
+.pmsg{font-size:13px;color:var(--text2);}
+.ptrack{margin:20px 22px 0;height:3px;background:var(--surface2);border-radius:3px;overflow:hidden;}
+.pfill{height:100%;background:var(--accent);border-radius:3px;width:0%;transition:width .4s ease;}
 
-.file-ready {
-  display: none; align-items: center; gap: 10px; margin-top: 14px;
-  background: rgba(16,185,129,0.1); border: 1px solid rgba(16,185,129,0.25);
-  border-radius: 10px; padding: 10px 14px; text-align: left;
-}
-.file-ready.show { display: flex; }
-.file-ready-name { font-size: 13px; font-weight: 600; color: #34d399; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.file-ready-size { font-size: 11px; color: var(--text3); }
+/* LIVE LOG */
+.dblog{margin:16px 18px 0;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:12px;max-height:160px;overflow-y:auto;}
+.dblog-t{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:7px;font-weight:600;}
+.dbl{font-size:11px;font-family:monospace;color:var(--text2);padding:2px 0;line-height:1.5;}
+.dbl.ok{color:var(--green);}
+.dbl.er{color:var(--red);}
+.dbl.inf{color:var(--gold);}
 
-/* Form */
-.form-wrap { padding: 14px 16px 0; }
-.field-label { font-size: 11px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 6px; display: block; }
-.field-input {
-  width: 100%; background: var(--surface); border: 1px solid var(--border);
-  border-radius: var(--r); padding: 13px 16px; font-size: 14px;
-  color: var(--text); font-family: var(--font-body); outline: none;
-  transition: border-color 0.15s; -webkit-appearance: none; margin-bottom: 12px;
-}
-.field-input:focus { border-color: var(--accent); }
-.field-input::placeholder { color: var(--text3); }
+/* STEP LIST */
+.slist{padding:16px 18px;}
+.srow{display:flex;align-items:center;gap:12px;padding:10px 13px;border-radius:var(--r);margin-bottom:7px;background:var(--surface);border:1px solid var(--border);transition:all .3s;}
+.srow.done{border-color:rgba(16,185,129,.3);background:rgba(16,185,129,.05);}
+.srow.cur{border-color:rgba(26,110,245,.35);background:rgba(26,110,245,.07);}
+.sico{width:28px;height:28px;border-radius:50%;background:var(--surface2);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;}
+.smain{font-size:13px;font-weight:600;}
+.shint{font-size:11px;color:var(--text3);}
 
-.exp-chips { display: flex; gap: 8px; margin-bottom: 14px; }
-.exp-chip {
-  flex: 1; background: var(--surface); border: 1px solid var(--border);
-  border-radius: var(--r); padding: 10px 6px; text-align: center;
-  font-size: 12px; font-weight: 600; color: var(--text2); cursor: pointer;
-  transition: all 0.15s;
-}
-.exp-chip.on { background: rgba(26,110,245,0.14); border-color: var(--accent); color: var(--accent2); }
+/* ERROR */
+.errbox{margin:20px 18px;background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.25);border-radius:var(--r2);padding:20px;}
+.errbox h3{font-size:16px;font-weight:700;color:#f87171;margin-bottom:10px;}
+.errbox p{font-size:13px;color:var(--text2);line-height:1.65;margin-bottom:10px;}
+.errbox code{display:block;background:var(--surface2);border-radius:8px;padding:10px;font-size:11px;font-family:monospace;color:#fca5a5;word-break:break-all;margin-bottom:12px;line-height:1.6;}
+.retrybtn{width:100%;padding:12px;background:var(--accent);color:#fff;border:none;border-radius:var(--r);font-size:14px;font-weight:700;cursor:pointer;font-family:var(--font);}
 
-.go-btn {
-  width: 100%; padding: 16px; background: var(--accent); color: #fff;
-  border: none; border-radius: var(--r2); font-size: 15px; font-weight: 700;
-  cursor: pointer; display: flex; align-items: center; justify-content: center;
-  gap: 8px; transition: all 0.2s; letter-spacing: 0.1px; margin-bottom: 14px;
-}
-.go-btn:active { transform: scale(0.98); opacity: 0.9; }
-.go-btn:disabled { background: var(--surface2); color: var(--text3); cursor: not-allowed; transform: none; }
+/* JOBS */
+.jsticky{position:sticky;top:0;background:var(--bg);z-index:10;border-bottom:1px solid var(--border);padding:16px 16px 10px;}
+.jh{font-size:19px;font-weight:800;margin-bottom:3px;}
+.jm{font-size:12px;color:var(--text3);}
+.srow2{display:flex;gap:8px;padding:11px 16px;overflow-x:auto;scrollbar-width:none;}
+.srow2::-webkit-scrollbar{display:none;}
+.spill{flex-shrink:0;background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:8px 18px;text-align:center;}
+.spill .sv{font-size:18px;font-weight:800;}
+.spill .sl{font-size:10px;color:var(--text3);margin-top:1px;}
+.spill.b .sv{color:var(--accent2);}
+.spill.g .sv{color:var(--green);}
+.spill.o .sv{color:var(--gold);}
+.frow{display:flex;gap:8px;padding:4px 16px 10px;overflow-x:auto;scrollbar-width:none;}
+.frow::-webkit-scrollbar{display:none;}
+.fchip{flex-shrink:0;padding:7px 13px;border-radius:20px;border:1px solid var(--border);background:transparent;color:var(--text2);font-size:12px;font-weight:600;cursor:pointer;font-family:var(--font);white-space:nowrap;transition:all .15s;}
+.fchip.on{background:var(--accent);border-color:var(--accent);color:#fff;}
+.slabel{padding:13px 16px 6px;font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;font-weight:600;display:flex;align-items:center;gap:8px;}
+.scnt{background:var(--surface2);border-radius:20px;padding:2px 8px;font-size:10px;color:var(--text2);}
 
-.install-teaser {
-  margin: 0 0 16px; background: var(--surface); border: 1px solid var(--border);
-  border-radius: var(--r2); padding: 14px 16px; display: flex;
-  align-items: center; gap: 12px; cursor: pointer;
-}
-.install-teaser-text h4 { font-size: 13px; font-weight: 600; margin-bottom: 2px; }
-.install-teaser-text p { font-size: 11px; color: var(--text3); }
+/* JOB CARD */
+.jcard{margin:0 16px 10px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r2);padding:15px;}
+.jcard.hc{border-color:rgba(16,185,129,.22);}
+.jcard.sc{border-color:rgba(239,68,68,.18);}
+.jtop{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:9px;}
+.jleft{flex:1;min-width:0;padding-right:10px;}
+.jtitle{font-size:15px;font-weight:700;line-height:1.3;}
+.jco{font-size:12px;color:var(--text2);margin-top:3px;}
+.jbadge{display:inline-block;padding:1px 7px;border-radius:8px;font-size:10px;background:var(--surface2);color:var(--text3);margin-left:6px;}
+.sring{flex-shrink:0;width:46px;height:46px;position:relative;}
+.sring svg{width:46px;height:46px;}
+.sval{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;}
+.jmeta{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:9px;}
+.mt{display:flex;align-items:center;gap:4px;font-size:11px;color:var(--text2);background:var(--surface2);border-radius:8px;padding:4px 9px;}
+.mt.g{background:rgba(16,185,129,.1);color:#34d399;}
+.mt.o{background:rgba(245,158,11,.1);color:#fbbf24;}
+.jskills{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:9px;}
+.sk{font-size:10px;padding:3px 9px;border-radius:20px;background:rgba(26,110,245,.1);color:#93c5fd;border:1px solid rgba(26,110,245,.2);}
+.jreason{font-size:11px;color:var(--text3);line-height:1.55;margin-bottom:11px;font-style:italic;}
+.jacts{display:flex;gap:8px;}
+.abtn{flex:1;padding:11px;background:var(--accent);color:#fff;border:none;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;font-family:var(--font);display:flex;align-items:center;justify-content:center;gap:5px;text-decoration:none;}
+.abtn:active{background:#0d4bc4;}
+.bkbtn{width:42px;height:42px;background:var(--surface2);border:1px solid var(--border);border-radius:10px;color:var(--text2);cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;}
+.bkbtn.sv{background:rgba(16,185,129,.1);border-color:rgba(16,185,129,.3);color:var(--green);}
 
-/* ── PROGRESS SCREEN ── */
-.prog-hero { padding: 44px 24px 24px; text-align: center; }
-.spinner-wrap { width: 76px; height: 76px; margin: 0 auto 20px; position: relative; }
-.spinner-svg { animation: spin 1.4s linear infinite; width: 76px; height: 76px; }
-@keyframes spin { to { transform: rotate(360deg); } }
-.spinner-pct {
-  position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
-  font-size: 15px; font-weight: 800; color: var(--accent2);
-}
-.prog-title { font-size: 21px; font-weight: 800; margin-bottom: 6px; }
-.prog-msg { font-size: 13px; color: var(--text2); }
-.prog-track { margin: 22px 24px 0; height: 3px; background: var(--surface2); border-radius: 3px; overflow: hidden; }
-.prog-fill { height: 100%; background: var(--accent); border-radius: 3px; width: 0%; transition: width 0.45s ease; }
-.step-list { padding: 22px 20px; }
-.step-row {
-  display: flex; align-items: center; gap: 12px; padding: 11px 14px;
-  border-radius: var(--r); margin-bottom: 8px; background: var(--surface);
-  border: 1px solid var(--border); transition: all 0.3s;
-}
-.step-row.done { border-color: rgba(16,185,129,0.3); background: rgba(16,185,129,0.05); }
-.step-row.cur { border-color: rgba(26,110,245,0.35); background: rgba(26,110,245,0.07); }
-.step-ico {
-  width: 30px; height: 30px; border-radius: 50%; background: var(--surface2);
-  display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0;
-}
-.step-row.done .step-ico { background: rgba(16,185,129,0.12); }
-.step-row.cur .step-ico { background: rgba(26,110,245,0.12); }
-.step-main { font-size: 13px; font-weight: 600; }
-.step-hint { font-size: 11px; color: var(--text3); }
+/* EMPTY */
+.empt{padding:55px 22px;text-align:center;}
+.ei{font-size:48px;margin-bottom:14px;}
+.eh{font-size:18px;font-weight:700;margin-bottom:8px;}
+.ep{font-size:13px;color:var(--text3);line-height:1.6;}
+.ecta{margin-top:18px;display:inline-block;padding:11px 22px;background:var(--accent);color:#fff;border-radius:20px;font-size:13px;font-weight:600;cursor:pointer;border:none;font-family:var(--font);}
 
-/* ── JOBS SCREEN ── */
-.jobs-sticky {
-  position: sticky; top: 0; background: var(--bg); z-index: 10;
-  border-bottom: 1px solid var(--border); padding: 18px 16px 10px;
-}
-.jobs-h { font-size: 19px; font-weight: 800; margin-bottom: 3px; }
-.jobs-meta { font-size: 12px; color: var(--text3); }
+/* PROFILE */
+.ptop{padding:26px 18px;text-align:center;background:var(--surface);border-bottom:1px solid var(--border);}
+.ava{width:72px;height:72px;background:var(--accent);border-radius:50%;margin:0 auto 13px;display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:800;color:#fff;}
+.pname{font-size:20px;font-weight:800;margin-bottom:4px;}
+.prole{font-size:13px;color:var(--text2);}
+.prow{display:flex;border-top:1px solid var(--border);margin-top:14px;}
+.pn{flex:1;text-align:center;padding:11px;}
+.pn:not(:last-child){border-right:1px solid var(--border);}
+.pnv{font-size:19px;font-weight:800;color:var(--accent2);}
+.pnl{font-size:10px;color:var(--text3);margin-top:2px;}
+.pcard{margin:13px 16px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r2);padding:15px;}
+.pct{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:11px;font-weight:600;}
+.ptags2{display:flex;flex-wrap:wrap;gap:7px;}
+.ptag2{padding:5px 11px;border-radius:20px;font-size:12px;background:var(--surface2);color:var(--text2);border:1px solid var(--border);}
+.rptbtn{width:100%;padding:12px;background:var(--accent);color:#fff;border:none;border-radius:var(--r);font-size:13px;font-weight:700;font-family:var(--font);cursor:pointer;margin-top:11px;}
+#rsts{margin-top:9px;font-size:12px;color:var(--text3);text-align:center;line-height:1.5;}
 
-.stats-scroll { display: flex; gap: 8px; padding: 12px 16px; overflow-x: auto; scrollbar-width: none; }
-.stats-scroll::-webkit-scrollbar { display: none; }
-.stat-pill {
-  flex-shrink: 0; background: var(--surface); border: 1px solid var(--border);
-  border-radius: 20px; padding: 8px 18px; text-align: center;
-}
-.stat-pill .sv { font-size: 19px; font-weight: 800; }
-.stat-pill .sl { font-size: 10px; color: var(--text3); margin-top: 1px; }
-.stat-pill.blue .sv { color: var(--accent2); }
-.stat-pill.grn .sv { color: var(--green); }
-.stat-pill.gld .sv { color: var(--gold); }
+/* GUIDE */
+.gwrap{padding:18px 16px 0;}
+.gh{font-size:20px;font-weight:800;margin-bottom:6px;}
+.gp{font-size:13px;color:var(--text2);line-height:1.65;margin-bottom:16px;}
+.ibox{background:rgba(26,110,245,.08);border:1px solid rgba(26,110,245,.2);border-radius:var(--r);padding:13px 15px;margin-bottom:16px;font-size:12px;color:#93c5fd;line-height:1.65;}
+.gstep{background:var(--surface);border:1px solid var(--border);border-radius:var(--r2);padding:15px;margin-bottom:11px;display:flex;gap:13px;align-items:flex-start;}
+.gn{width:34px;height:34px;background:var(--accent);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;color:#fff;flex-shrink:0;}
+.gt h4{font-size:14px;font-weight:700;margin-bottom:4px;}
+.gt p{font-size:12px;color:var(--text3);line-height:1.6;}
+.gtip{display:inline-block;margin-top:6px;padding:4px 10px;background:rgba(245,158,11,.1);color:#fbbf24;border-radius:8px;font-size:11px;}
+.backbtn{width:100%;padding:13px;background:var(--accent);color:#fff;border:none;border-radius:var(--r2);font-size:14px;font-weight:700;font-family:var(--font);cursor:pointer;margin-bottom:16px;}
 
-.chips-row { display: flex; gap: 8px; padding: 4px 16px 10px; overflow-x: auto; scrollbar-width: none; }
-.chips-row::-webkit-scrollbar { display: none; }
-.fchip {
-  flex-shrink: 0; padding: 7px 14px; border-radius: 20px;
-  border: 1px solid var(--border); background: transparent;
-  color: var(--text2); font-size: 12px; font-weight: 600; cursor: pointer;
-  font-family: var(--font-body); white-space: nowrap; transition: all 0.15s;
-}
-.fchip.on { background: var(--accent); border-color: var(--accent); color: #fff; }
-
-.sec-label {
-  padding: 14px 16px 6px; font-size: 11px; color: var(--text3);
-  text-transform: uppercase; letter-spacing: 0.08em; font-weight: 600;
-  display: flex; align-items: center; gap: 8px;
-}
-.sec-count {
-  background: var(--surface2); border-radius: 20px; padding: 2px 8px;
-  font-size: 10px; color: var(--text2);
-}
-
-/* Job card */
-.jcard {
-  margin: 0 16px 10px; background: var(--surface); border: 1px solid var(--border);
-  border-radius: var(--r2); padding: 16px; transition: border-color 0.15s;
-}
-.jcard.hcard { border-color: rgba(16,185,129,0.22); }
-.jcard.scard { border-color: rgba(239,68,68,0.18); }
-.jcard-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
-.jcard-left { flex: 1; min-width: 0; padding-right: 10px; }
-.jtitle { font-size: 15px; font-weight: 700; line-height: 1.3; }
-.jcompany { font-size: 12px; color: var(--text2); margin-top: 3px; }
-.jtype-badge {
-  display: inline-block; padding: 1px 7px; border-radius: 8px;
-  font-size: 10px; background: var(--surface2); color: var(--text3); margin-left: 6px;
-}
-.score-ring { flex-shrink: 0; width: 46px; height: 46px; position: relative; }
-.score-ring svg { width: 46px; height: 46px; }
-.score-num {
-  position: absolute; inset: 0; display: flex; align-items: center;
-  justify-content: center; font-size: 11px; font-weight: 800;
-}
-.jmeta { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
-.mtag {
-  display: flex; align-items: center; gap: 4px; font-size: 11px;
-  color: var(--text2); background: var(--surface2); border-radius: 8px; padding: 4px 9px;
-}
-.mtag.mgrn { background: rgba(16,185,129,0.1); color: #34d399; }
-.mtag.mgld { background: rgba(245,158,11,0.1); color: #fbbf24; }
-.jskills { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 10px; }
-.jtag {
-  font-size: 10px; padding: 3px 9px; border-radius: 20px;
-  background: rgba(26,110,245,0.1); color: #93c5fd; border: 1px solid rgba(26,110,245,0.2);
-}
-.jreason { font-size: 11px; color: var(--text3); line-height: 1.55; margin-bottom: 12px; font-style: italic; }
-.jactions { display: flex; gap: 8px; }
-.apply-m {
-  flex: 1; padding: 11px; background: var(--accent); color: #fff;
-  border: none; border-radius: 10px; font-size: 13px; font-weight: 700;
-  cursor: pointer; font-family: var(--font-body); display: flex;
-  align-items: center; justify-content: center; gap: 6px;
-  text-decoration: none; transition: background 0.15s;
-}
-.apply-m:active { background: #0d4bc4; }
-.bk-btn {
-  width: 42px; height: 42px; background: var(--surface2);
-  border: 1px solid var(--border); border-radius: 10px;
-  color: var(--text2); cursor: pointer; font-size: 16px;
-  display: flex; align-items: center; justify-content: center; transition: all 0.15s;
-}
-.bk-btn.saved { background: rgba(16,185,129,0.1); border-color: rgba(16,185,129,0.3); color: var(--green); }
-
-/* Empty */
-.empty-box { padding: 60px 24px; text-align: center; }
-.empty-ico { font-size: 50px; margin-bottom: 16px; }
-.empty-h { font-size: 18px; font-weight: 700; margin-bottom: 8px; }
-.empty-p { font-size: 13px; color: var(--text3); line-height: 1.6; }
-.empty-cta {
-  margin-top: 20px; display: inline-block; padding: 12px 24px;
-  background: var(--accent); color: #fff; border-radius: 20px;
-  font-size: 13px; font-weight: 600; cursor: pointer; border: none; font-family: var(--font-body);
-}
-
-/* ── PROFILE SCREEN ── */
-.prof-top {
-  padding: 28px 20px; text-align: center;
-  background: var(--surface); border-bottom: 1px solid var(--border);
-}
-.avatar {
-  width: 74px; height: 74px; background: var(--accent); border-radius: 50%;
-  margin: 0 auto 14px; display: flex; align-items: center; justify-content: center;
-  font-size: 28px; font-weight: 800; color: #fff;
-}
-.prof-name { font-size: 20px; font-weight: 800; margin-bottom: 4px; }
-.prof-role { font-size: 13px; color: var(--text2); }
-.prof-row { display: flex; border-top: 1px solid var(--border); margin-top: 16px; }
-.pnum { flex: 1; text-align: center; padding: 12px; }
-.pnum:not(:last-child) { border-right: 1px solid var(--border); }
-.pnum-v { font-size: 20px; font-weight: 800; color: var(--accent2); }
-.pnum-l { font-size: 10px; color: var(--text3); margin-top: 2px; }
-.pcard { margin: 14px 16px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--r2); padding: 16px; }
-.pcard-t { font-size: 11px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 12px; font-weight: 600; }
-.ptags { display: flex; flex-wrap: wrap; gap: 7px; }
-.ptag { padding: 6px 12px; border-radius: 20px; font-size: 12px; background: var(--surface2); color: var(--text2); border: 1px solid var(--border); }
-.email-report-btn {
-  width: 100%; padding: 13px; background: var(--accent); color: #fff;
-  border: none; border-radius: var(--r); font-size: 14px; font-weight: 700;
-  font-family: var(--font-body); cursor: pointer; margin-top: 12px;
-}
-#rptStatus { margin-top: 10px; font-size: 12px; color: var(--text3); text-align: center; }
-
-/* ── INSTALL GUIDE ── */
-.guide-wrap { padding: 20px 16px 0; }
-.guide-h { font-size: 20px; font-weight: 800; margin-bottom: 6px; }
-.guide-p { font-size: 13px; color: var(--text2); line-height: 1.65; margin-bottom: 18px; }
-.info-box {
-  background: rgba(26,110,245,0.09); border: 1px solid rgba(26,110,245,0.22);
-  border-radius: var(--r); padding: 14px 16px; margin-bottom: 18px;
-  font-size: 12px; color: #93c5fd; line-height: 1.65;
-}
-.gstep {
-  background: var(--surface); border: 1px solid var(--border);
-  border-radius: var(--r2); padding: 16px; margin-bottom: 12px;
-  display: flex; gap: 14px; align-items: flex-start;
-}
-.gnum {
-  width: 34px; height: 34px; background: var(--accent); border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 14px; font-weight: 800; color: #fff; flex-shrink: 0;
-}
-.gtext h4 { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
-.gtext p { font-size: 12px; color: var(--text3); line-height: 1.6; }
-.gtip {
-  display: inline-block; margin-top: 7px; padding: 4px 10px;
-  background: rgba(245,158,11,0.1); color: #fbbf24; border-radius: 8px; font-size: 11px;
-}
-.perks-box { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r2); padding: 16px; margin-bottom: 16px; }
-.perks-t { font-size: 11px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 12px; font-weight: 600; }
-.perk { display: flex; align-items: center; gap: 10px; font-size: 13px; padding: 5px 0; }
-.back-btn {
-  width: 100%; padding: 14px; background: var(--accent); color: #fff;
-  border: none; border-radius: var(--r2); font-size: 14px; font-weight: 700;
-  font-family: var(--font-body); cursor: pointer; margin-bottom: 16px;
-}
-
-/* Toast */
-#toast {
-  position: fixed; bottom: calc(88px + var(--safe-bottom)); left: 50%;
-  transform: translateX(-50%) translateY(16px);
-  background: #1e293b; border: 1px solid var(--border2);
-  border-radius: 20px; padding: 10px 20px; font-size: 13px;
-  color: var(--text); opacity: 0; transition: all 0.28s;
-  pointer-events: none; white-space: nowrap; z-index: 999;
-}
-#toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
-
-::-webkit-scrollbar { width: 2px; }
-::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
+#toast{position:fixed;bottom:calc(86px + var(--safe-bottom));left:50%;transform:translateX(-50%) translateY(14px);background:#1e293b;border:1px solid var(--border2);border-radius:20px;padding:10px 18px;font-size:13px;color:var(--text);opacity:0;transition:all .25s;pointer-events:none;white-space:nowrap;z-index:999;}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+::-webkit-scrollbar{width:2px;}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px;}
 </style>
 </head>
 <body>
 <div id="app">
 
-  <!-- HEADER -->
-  <div id="header">
-    <div class="header-logo">
-      <div class="logo-icon">💼</div>
-      <div>
-        <div class="logo-text">AI Recruiter India</div>
-        <div class="logo-sub">Job Hunting Machine</div>
-      </div>
-    </div>
-    <button id="install-btn" onclick="installApp()">⬇ Install</button>
+<div id="hdr">
+  <div class="hlogo">
+    <div class="hicon">💼</div>
+    <div><div class="htitle">AI Recruiter India</div><div class="hsub">100% Dynamic · Every Resume Unique</div></div>
   </div>
-
-  <!-- SCREENS -->
-  <div id="screens">
-
-    <!-- ── HOME ── -->
-    <div class="screen active" id="S_home">
-      <div class="home-hero">
-        <div class="live-badge"><span class="live-dot"></span>Live · India Job Market</div>
-        <div class="hero-title">Your personal<br/><span>AI Job Hunter</span></div>
-        <div class="hero-sub">Upload resume → Get 20+ matched jobs from real companies, fit-scored &amp; prioritized for you.</div>
-      </div>
-
-      <div class="how-row">
-        <div class="how-pill"><div class="how-pill-icon">📄</div><div class="how-pill-text">Upload<br/>Resume</div></div>
-        <div class="how-pill"><div class="how-pill-icon">🧠</div><div class="how-pill-text">AI<br/>Analyzes</div></div>
-        <div class="how-pill"><div class="how-pill-icon">🎯</div><div class="how-pill-text">Scored<br/>Matches</div></div>
-        <div class="how-pill"><div class="how-pill-icon">📧</div><div class="how-pill-text">Email<br/>Report</div></div>
-        <div class="how-pill"><div class="how-pill-icon">✅</div><div class="how-pill-text">Apply<br/>Instantly</div></div>
-      </div>
-
-      <div class="upload-card" id="uploadZone"
-           onclick="document.getElementById('fileInput').click()"
-           ondragover="doDrag(event,true)" ondragleave="doDrag(event,false)" ondrop="doDrop(event)">
-        <span class="upload-big-icon" id="upIcon">📄</span>
-        <div class="upload-title" id="upTitle">Upload Your Resume</div>
-        <div class="upload-sub" id="upSub">PDF, DOCX or TXT · Tap to browse</div>
-        <div class="file-ready" id="fileReady">
-          <span style="font-size:22px">✅</span>
-          <div>
-            <div class="file-ready-name" id="fName"></div>
-            <div class="file-ready-size" id="fSize"></div>
-          </div>
-        </div>
-      </div>
-      <input type="file" id="fileInput" accept=".pdf,.doc,.docx,.txt" onchange="pickFile(event)"/>
-
-      <div class="form-wrap">
-        <label class="field-label">Your Email (for job report)</label>
-        <input class="field-input" id="emailF" type="email" placeholder="yourname@email.com" oninput="chkReady()"/>
-
-        <label class="field-label">Minimum Experience</label>
-        <div class="exp-chips">
-          <div class="exp-chip on" onclick="setExp(this,'10+ years')">10+ yrs</div>
-          <div class="exp-chip" onclick="setExp(this,'13+ years')">13+ yrs</div>
-          <div class="exp-chip" onclick="setExp(this,'15+ years')">15+ yrs</div>
-          <div class="exp-chip" onclick="setExp(this,'Any')">Any</div>
-        </div>
-
-        <button class="go-btn" id="goBtn" disabled onclick="startAnalysis()">🔍 Find My Jobs</button>
-
-        <div class="install-teaser" onclick="nav('guide')">
-          <span style="font-size:26px">📲</span>
-          <div class="install-teaser-text">
-            <h4>Install as Android App</h4>
-            <p>Step-by-step guide to add to home screen →</p>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- ── PROGRESS ── -->
-    <div class="screen" id="S_progress">
-      <div class="prog-hero">
-        <div class="spinner-wrap">
-          <svg class="spinner-svg" viewBox="0 0 76 76" fill="none">
-            <circle cx="38" cy="38" r="32" stroke="rgba(26,110,245,0.12)" stroke-width="5"/>
-            <path d="M38 6 A32 32 0 0 1 70 38" stroke="var(--accent)" stroke-width="5" stroke-linecap="round"/>
-          </svg>
-          <div class="spinner-pct" id="pctTxt">0%</div>
-        </div>
-        <div class="prog-title">Hunting Jobs For You</div>
-        <div class="prog-msg" id="progMsg">Reading your resume...</div>
-      </div>
-      <div class="prog-track"><div class="prog-fill" id="progBar"></div></div>
-      <div class="step-list" id="stepList"></div>
-    </div>
-
-    <!-- ── JOBS ── -->
-    <div class="screen" id="S_jobs">
-      <div class="jobs-sticky">
-        <div class="jobs-h">Job Matches 🎯</div>
-        <div class="jobs-meta" id="jobsMeta">Upload resume to see matches</div>
-      </div>
-      <div class="stats-scroll" id="statsRow" style="display:none">
-        <div class="stat-pill blue"><div class="sv" id="stTotal">0</div><div class="sl">Found</div></div>
-        <div class="stat-pill grn"><div class="sv" id="stHigh">0</div><div class="sl">High Fit</div></div>
-        <div class="stat-pill gld"><div class="sv" id="stSal">0</div><div class="sl">35L+ Roles</div></div>
-        <div class="stat-pill"><div class="sv" id="stAvg">—</div><div class="sl">Avg Score</div></div>
-      </div>
-      <div class="chips-row" id="filterRow" style="display:none">
-        <button class="fchip on" onclick="filter('all',this)">All Jobs</button>
-        <button class="fchip" onclick="filter('high',this)">🟢 High Fit</button>
-        <button class="fchip" onclick="filter('medium',this)">🟡 Medium</button>
-        <button class="fchip" onclick="filter('stretch',this)">🔴 Stretch</button>
-        <button class="fchip" onclick="filter('salary',this)">💰 35L+</button>
-        <button class="fchip" onclick="filter('mnc',this)">MNC</button>
-        <button class="fchip" onclick="filter('startup',this)">Startup</button>
-      </div>
-      <div id="jobsList">
-        <div class="empty-box">
-          <div class="empty-ico">🎯</div>
-          <div class="empty-h">No jobs yet</div>
-          <div class="empty-p">Upload your resume on the Home tab and tap Find My Jobs.</div>
-          <button class="empty-cta" onclick="nav('home')">Go to Home →</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- ── PROFILE ── -->
-    <div class="screen" id="S_profile">
-      <div id="profContent">
-        <div class="empty-box">
-          <div class="empty-ico">👤</div>
-          <div class="empty-h">No Profile Yet</div>
-          <div class="empty-p">Upload your resume to see your extracted profile here.</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- ── INSTALL GUIDE ── -->
-    <div class="screen" id="S_guide">
-      <div class="guide-wrap">
-        <div class="guide-h">📲 Install on Android</div>
-        <div class="guide-p">This app works exactly like a native Android app — no Play Store required. Follow these 5 steps to install it on your home screen.</div>
-
-        <div class="info-box">
-          <strong>✅ Supported browsers:</strong> Chrome, Edge, Samsung Browser (Android 6+)<br/>
-          <strong>⚡ You get:</strong> App icon, full-screen, offline support, instant launch
-        </div>
-
-        <div class="gstep">
-          <div class="gnum">1</div>
-          <div class="gtext">
-            <h4>Open this page in Chrome</h4>
-            <p>Make sure you're using <strong>Google Chrome</strong> (or Samsung Browser / Microsoft Edge) on your Android phone. Copy the URL and paste it in Chrome if needed.</p>
-          </div>
-        </div>
-        <div class="gstep">
-          <div class="gnum">2</div>
-          <div class="gtext">
-            <h4>Tap the ⋮ Three-dot Menu</h4>
-            <p>In Chrome, tap the <strong>three vertical dots (⋮)</strong> in the top-right corner of the browser. A dropdown menu will slide open.</p>
-          </div>
-        </div>
-        <div class="gstep">
-          <div class="gnum">3</div>
-          <div class="gtext">
-            <h4>Tap "Add to Home screen"</h4>
-            <p>Scroll down in the menu and tap <strong>"Add to Home screen"</strong>. You may also see a blue banner at the bottom of Chrome — tap that too.</p>
-            <span class="gtip">💡 May also appear as "Install app"</span>
-          </div>
-        </div>
-        <div class="gstep">
-          <div class="gnum">4</div>
-          <div class="gtext">
-            <h4>Tap "Add" to Confirm</h4>
-            <p>A dialog shows the app name <strong>"AI Jobs"</strong>. Tap <strong>Add</strong> or <strong>Install</strong> to confirm. The icon will be placed on your home screen.</p>
-          </div>
-        </div>
-        <div class="gstep">
-          <div class="gnum">5</div>
-          <div class="gtext">
-            <h4>Open from Home Screen 🎉</h4>
-            <p>Find the <strong>"AI Jobs"</strong> icon on your Android home screen. Tap it — the app opens full-screen with no browser bar, just like a native app!</p>
-            <span class="gtip">🚀 Launches instantly, works offline too</span>
-          </div>
-        </div>
-
-        <div class="perks-box">
-          <div class="perks-t">What you get after installing</div>
-          <div class="perk"><span>📱</span> Full-screen mode — no browser address bar</div>
-          <div class="perk"><span>⚡</span> Instant launch from home screen icon</div>
-          <div class="perk"><span>🔄</span> Offline support — cached content loads always</div>
-          <div class="perk"><span>🔔</span> Auto-updates when you're online</div>
-          <div class="perk"><span>💾</span> No Play Store or APK download needed</div>
-        </div>
-
-        <button class="back-btn" onclick="nav('home')">← Back to App</button>
-      </div>
-    </div>
-
-  </div><!-- /screens -->
-
-  <!-- BOTTOM NAV -->
-  <div id="nav">
-    <button class="nav-btn active" id="nb_home" onclick="nav('home')">
-      <span class="nav-icon">🏠</span><span class="nav-label">Home</span>
-    </button>
-    <button class="nav-btn" id="nb_jobs" onclick="nav('jobs')">
-      <span class="nav-icon">💼</span><span class="nav-label">Jobs</span>
-    </button>
-    <button class="nav-btn" id="nb_profile" onclick="nav('profile')">
-      <span class="nav-icon">👤</span><span class="nav-label">Profile</span>
-    </button>
-    <button class="nav-btn" id="nb_guide" onclick="nav('guide')">
-      <span class="nav-icon">📲</span><span class="nav-label">Install</span>
-    </button>
-  </div>
+  <button id="ibtn" onclick="installApp()">⬇ Install</button>
 </div>
 
+<div id="screens">
+
+  <!-- HOME -->
+  <div class="scr on" id="S_home">
+    <div class="hero">
+      <div class="live-pill"><span class="ldot"></span>Live AI · Different Resume = Different Jobs</div>
+      <div class="htxt">Your personal<br/><span>AI Job Hunter</span></div>
+      <div class="hsub2">Upload any resume → AI reads it deeply → Generates 20+ jobs matched to YOUR exact skills. Different resume always gives completely different results.</div>
+    </div>
+
+    <div class="apibox">
+      <h4>🔑 Enter Your Anthropic API Key</h4>
+      <p>This app calls Claude AI live to read your resume and generate unique job matches. Your key is never stored — only used in your browser session.</p>
+      <input type="password" id="apiKey" placeholder="sk-ant-api03-xxxxxxxx..." oninput="chkReady()" autocomplete="off" spellcheck="false"/>
+      <a class="apilink" href="https://console.anthropic.com/settings/keys" target="_blank" rel="noopener">→ Get your free API key at console.anthropic.com</a>
+    </div>
+
+    <div class="upcard" id="upzone"
+         onclick="document.getElementById('fi').click()"
+         ondragover="drag(event,true)" ondragleave="drag(event,false)" ondrop="drop(event)">
+      <span class="upico" id="upico">📄</span>
+      <div class="uptitle" id="uptitle">Upload Your Resume</div>
+      <div class="upsub" id="upsub">PDF, DOCX or TXT · Tap to browse</div>
+      <div class="fbadge" id="fbadge">
+        <span style="font-size:22px">✅</span>
+        <div><div class="fname" id="fname"></div><div class="fsize" id="fsize"></div></div>
+      </div>
+    </div>
+    <input type="file" id="fi" accept=".pdf,.doc,.docx,.txt" onchange="pickFile(event)"/>
+
+    <div class="fwrap">
+      <label class="flabel">Your Email (for full report)</label>
+      <input class="finput" id="emailF" type="email" placeholder="yourname@email.com" oninput="chkReady()"/>
+      <label class="flabel">Minimum Experience</label>
+      <div class="echips">
+        <div class="echip on" onclick="setExp(this,'10+ years')">10+ yrs</div>
+        <div class="echip" onclick="setExp(this,'13+ years')">13+ yrs</div>
+        <div class="echip" onclick="setExp(this,'15+ years')">15+ yrs</div>
+        <div class="echip" onclick="setExp(this,'Any')">Any</div>
+      </div>
+      <button class="gobtn" id="goBtn" disabled onclick="startAnalysis()">🔍 Find My Jobs — Live AI</button>
+      <div style="margin:0 0 14px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r2);padding:13px 15px;display:flex;align-items:center;gap:11px;cursor:pointer;" onclick="nav('guide')">
+        <span style="font-size:24px">📲</span>
+        <div><div style="font-size:13px;font-weight:600;">Install as Android App</div><div style="font-size:11px;color:var(--text3);margin-top:2px;">Step-by-step guide →</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROGRESS -->
+  <div class="scr" id="S_progress">
+    <div class="phero">
+      <div class="spinwrap">
+        <svg class="spinsvg" viewBox="0 0 74 74" fill="none">
+          <circle cx="37" cy="37" r="31" stroke="rgba(26,110,245,0.12)" stroke-width="5"/>
+          <path d="M37 6 A31 31 0 0 1 68 37" stroke="var(--accent)" stroke-width="5" stroke-linecap="round"/>
+        </svg>
+        <div class="spinpct" id="pctTxt">0%</div>
+      </div>
+      <div class="ptitle">Analysing Your Resume…</div>
+      <div class="pmsg" id="pmsg">Reading your unique skills &amp; experience</div>
+    </div>
+    <div class="ptrack"><div class="pfill" id="pbar"></div></div>
+    <div class="dblog" id="dblog"><div class="dblog-t">📡 Live AI Activity</div></div>
+    <div class="slist" id="slist"></div>
+  </div>
+
+  <!-- JOBS -->
+  <div class="scr" id="S_jobs">
+    <div class="jsticky">
+      <div class="jh">Job Matches 🎯</div>
+      <div class="jm" id="jm">Upload resume to see your personalised matches</div>
+    </div>
+    <div class="srow2" id="statsrow" style="display:none">
+      <div class="spill b"><div class="sv" id="stT">0</div><div class="sl">Found</div></div>
+      <div class="spill g"><div class="sv" id="stH">0</div><div class="sl">High Fit</div></div>
+      <div class="spill o"><div class="sv" id="stS">0</div><div class="sl">35L+ Roles</div></div>
+      <div class="spill"><div class="sv" id="stA">—</div><div class="sl">Avg Score</div></div>
+    </div>
+    <div class="frow" id="frow" style="display:none">
+      <button class="fchip on" onclick="filt('all',this)">All Jobs</button>
+      <button class="fchip" onclick="filt('high',this)">🟢 High Fit</button>
+      <button class="fchip" onclick="filt('medium',this)">🟡 Medium</button>
+      <button class="fchip" onclick="filt('stretch',this)">🔴 Stretch</button>
+      <button class="fchip" onclick="filt('salary',this)">💰 35L+</button>
+      <button class="fchip" onclick="filt('mnc',this)">MNC</button>
+      <button class="fchip" onclick="filt('startup',this)">Startup</button>
+    </div>
+    <div id="jobsList">
+      <div class="empt">
+        <div class="ei">🎯</div><div class="eh">No jobs yet</div>
+        <div class="ep">Upload your resume on the Home tab and tap Find My Jobs.</div>
+        <button class="ecta" onclick="nav('home')">Go to Home →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROFILE -->
+  <div class="scr" id="S_profile">
+    <div id="profContent">
+      <div class="empt">
+        <div class="ei">👤</div><div class="eh">No Profile Yet</div>
+        <div class="ep">Upload your resume to see your AI-extracted profile.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- INSTALL GUIDE -->
+  <div class="scr" id="S_guide">
+    <div class="gwrap">
+      <div class="gh">📲 Install on Android</div>
+      <div class="gp">Works like a native Android app — no Play Store needed. Follow these 5 steps.</div>
+      <div class="ibox"><strong>✅ Works on:</strong> Chrome, Edge, Samsung Browser (Android 6+)<br/><strong>⚡ You get:</strong> App icon, full-screen, offline UI, instant launch</div>
+      <div class="gstep"><div class="gn">1</div><div class="gt"><h4>Open in Chrome on Android</h4><p>Make sure you're using <strong>Google Chrome</strong>. Paste the GitHub Pages URL in Chrome's address bar.</p></div></div>
+      <div class="gstep"><div class="gn">2</div><div class="gt"><h4>Tap the ⋮ Three-dot Menu</h4><p>Tap the <strong>three vertical dots (⋮)</strong> in the top-right corner of Chrome.</p></div></div>
+      <div class="gstep"><div class="gn">3</div><div class="gt"><h4>Tap "Add to Home screen"</h4><p>Scroll down and tap <strong>"Add to Home screen"</strong> or the blue Install banner at the bottom.<span class="gtip">💡 May also say "Install app"</span></p></div></div>
+      <div class="gstep"><div class="gn">4</div><div class="gt"><h4>Tap "Add" to Confirm</h4><p>A dialog shows <strong>"AI Jobs"</strong>. Tap <strong>Add</strong> to place the icon on your home screen.</p></div></div>
+      <div class="gstep"><div class="gn">5</div><div class="gt"><h4>Launch from Home Screen 🎉</h4><p>Tap the <strong>AI Jobs</strong> icon — opens full-screen, no browser bar, like a native app!<span class="gtip">🚀 Works offline too</span></p></div></div>
+      <button class="backbtn" onclick="nav('home')">← Back to App</button>
+    </div>
+  </div>
+
+</div>
+
+<div id="nav">
+  <button class="nb on" id="nb_home" onclick="nav('home')"><span class="ni">🏠</span><span class="nl">Home</span></button>
+  <button class="nb" id="nb_jobs" onclick="nav('jobs')"><span class="ni">💼</span><span class="nl">Jobs</span></button>
+  <button class="nb" id="nb_profile" onclick="nav('profile')"><span class="ni">👤</span><span class="nl">Profile</span></button>
+  <button class="nb" id="nb_guide" onclick="nav('guide')"><span class="ni">📲</span><span class="nl">Install</span></button>
+</div>
+</div>
 <div id="toast"></div>
 
 <script>
-/* ════════════════════════════════
-   STATE
-════════════════════════════════ */
-let uploadedFile = null;
-let minExp = '10+ years';
-let allJobs = [];
-let profile = {};
-let deferredInstall = null;
+/* ── STATE ── */
+let uploadedFile = null, minExp = '10+ years', allJobs = [], profile = {}, deferredInstall = null;
 
-/* ════════════════════════════════
-   NAVIGATION
-════════════════════════════════ */
+/* ── NAV ── */
 function nav(id) {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  document.getElementById('S_' + id).classList.add('active');
-  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.scr').forEach(s => s.classList.remove('on'));
+  document.getElementById('S_' + id).classList.add('on');
+  document.querySelectorAll('.nb').forEach(b => b.classList.remove('on'));
   const nb = document.getElementById('nb_' + id);
-  if (nb) nb.classList.add('active');
+  if (nb) nb.classList.add('on');
 }
 
-/* ════════════════════════════════
-   FILE HANDLING
-════════════════════════════════ */
-function doDrag(e, on) {
-  e.preventDefault();
-  document.getElementById('uploadZone').classList.toggle('drag', on);
-}
-function doDrop(e) {
-  e.preventDefault();
-  document.getElementById('uploadZone').classList.remove('drag');
-  const f = e.dataTransfer.files[0];
-  if (f) setFile(f);
-}
+/* ── FILE ── */
+function drag(e, on) { e.preventDefault(); document.getElementById('upzone').classList.toggle('drag', on); }
+function drop(e) { e.preventDefault(); document.getElementById('upzone').classList.remove('drag'); if (e.dataTransfer.files[0]) setFile(e.dataTransfer.files[0]); }
 function pickFile(e) { if (e.target.files[0]) setFile(e.target.files[0]); }
-
 function setFile(f) {
   uploadedFile = f;
-  document.getElementById('fName').textContent = f.name;
-  document.getElementById('fSize').textContent = (f.size / 1024).toFixed(0) + ' KB';
-  document.getElementById('fileReady').classList.add('show');
-  document.getElementById('uploadZone').classList.add('has-file');
-  document.getElementById('upIcon').textContent = '✅';
-  document.getElementById('upTitle').textContent = 'Resume Ready!';
-  document.getElementById('upSub').textContent = 'Tap to change file';
-  chkReady();
-  toast('📄 Resume uploaded successfully!');
+  document.getElementById('fname').textContent = f.name;
+  document.getElementById('fsize').textContent = (f.size/1024).toFixed(0) + ' KB';
+  document.getElementById('fbadge').classList.add('show');
+  document.getElementById('upzone').classList.add('ready');
+  document.getElementById('upico').textContent = '✅';
+  document.getElementById('uptitle').textContent = 'Resume Ready!';
+  document.getElementById('upsub').textContent = 'Tap to change file';
+  chkReady(); toast('📄 Resume uploaded!');
 }
-
-function setExp(el, v) {
-  minExp = v;
-  document.querySelectorAll('.exp-chip').forEach(c => c.classList.remove('on'));
-  el.classList.add('on');
-}
-
+function setExp(el, v) { minExp = v; document.querySelectorAll('.echip').forEach(c => c.classList.remove('on')); el.classList.add('on'); }
 function chkReady() {
-  const em = document.getElementById('emailF').value;
-  document.getElementById('goBtn').disabled = !(uploadedFile && em.includes('@') && em.includes('.'));
+  const key = document.getElementById('apiKey').value.trim();
+  const email = document.getElementById('emailF').value;
+  document.getElementById('goBtn').disabled = !(uploadedFile && key.startsWith('sk-ant') && email.includes('@'));
 }
 
-/* ════════════════════════════════
-   ANALYSIS PIPELINE
-════════════════════════════════ */
+/* ── LOG ── */
+function log(msg, type) {
+  const d = document.getElementById('dblog');
+  const el = document.createElement('div');
+  el.className = 'dbl ' + (type||'');
+  el.textContent = new Date().toLocaleTimeString() + ' › ' + msg;
+  d.appendChild(el); d.scrollTop = d.scrollHeight;
+}
+
+/* ── STEPS ── */
 const STEPS = [
-  { ico: '📄', main: 'Reading resume',         hint: 'Extracting text & structure' },
-  { ico: '🧠', main: 'Parsing skills',          hint: 'Identifying tools & technologies' },
-  { ico: '🎯', main: 'Detecting seniority',     hint: 'Years of experience & level' },
-  { ico: '🌏', main: 'Scanning India market',   hint: 'Jobs posted in last 10 days' },
-  { ico: '🏢', main: 'Matching companies',      hint: 'MNCs, startups, consulting firms' },
-  { ico: '📊', main: 'Calculating fit scores',  hint: 'AI scoring each opportunity' },
-  { ico: '💰', main: 'Filtering 35L+ roles',    hint: 'High-salary opportunities only' },
-  { ico: '✅', main: 'Finalizing your list',    hint: 'Prioritizing & ranking jobs' },
+  { ico:'📄', main:'Reading resume file',          hint:'Extracting every word of your resume' },
+  { ico:'🧠', main:'Parsing skills & experience',  hint:'Tools, industries, achievements' },
+  { ico:'🎯', main:'Detecting seniority level',    hint:'Experience, progression, level' },
+  { ico:'🌏', main:'Scanning India job market',    hint:'Jobs posted in the last 10 days' },
+  { ico:'🏢', main:'Matching companies for you',   hint:'Personalised to YOUR specific profile' },
+  { ico:'📊', main:'Calculating unique fit scores',hint:'AI scoring based on YOUR resume only' },
+  { ico:'💰', main:'Filtering 35L+ roles',         hint:'High-salary opportunities only' },
+  { ico:'✅', main:'Finalising your job list',     hint:'Ranking & prioritising all matches' },
 ];
 
+function setStep(i) {
+  if (i > 0) { const p = document.getElementById('sr'+(i-1)); if(p) p.className='srow done'; }
+  const el = document.getElementById('sr'+i); if(el) el.className='srow cur';
+  document.getElementById('pmsg').textContent = STEPS[i].main + '…';
+}
+function setPct(n) { document.getElementById('pbar').style.width=n+'%'; document.getElementById('pctTxt').textContent=n+'%'; }
+function tick(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+/* ── MAIN ANALYSIS ── */
 async function startAnalysis() {
   document.getElementById('goBtn').disabled = true;
+  document.getElementById('dblog').innerHTML = '<div class="dblog-t">📡 Live AI Activity</div>';
   nav('progress');
 
-  // Render step rows
-  document.getElementById('stepList').innerHTML = STEPS.map((s, i) =>
-    `<div class="step-row" id="sr${i}">
-       <div class="step-ico">${s.ico}</div>
-       <div><div class="step-main">${s.main}</div><div class="step-hint">${s.hint}</div></div>
-     </div>`
+  document.getElementById('slist').innerHTML = STEPS.map((s,i) =>
+    `<div class="srow" id="sr${i}"><div class="sico">${s.ico}</div><div><div class="smain">${s.main}</div><div class="shint">${s.hint}</div></div></div>`
   ).join('');
 
-  // Read file
-  let txt = '';
-  try { txt = await readFileText(uploadedFile); } catch (_) { txt = '[PDF: ' + uploadedFile.name + ']'; }
-
-  // Step through with API calls embedded
-  for (let i = 0; i < STEPS.length; i++) {
-    const pct = Math.round(((i + 1) / STEPS.length) * 100);
-    document.getElementById('progBar').style.width = pct + '%';
-    document.getElementById('pctTxt').textContent = pct + '%';
-    document.getElementById('progMsg').textContent = STEPS[i].main + '...';
-    document.getElementById('sr' + i).className = 'step-row cur';
-    if (i > 0) document.getElementById('sr' + (i - 1)).className = 'step-row done';
-    if (i === 2) await doProfileCall(txt);   // extract profile at step 3
-    await sleep(480 + Math.random() * 320);
-  }
-  STEPS.forEach((_, i) => { document.getElementById('sr' + i).className = 'step-row done'; });
-
-  await doJobsCall(txt);   // main jobs call
-}
-
-function readFileText(f) {
-  return new Promise((res, rej) => {
-    if (f.name.endsWith('.pdf')) { res('[PDF resume: ' + f.name + ']'); return; }
-    const r = new FileReader();
-    r.onload = e => res(e.target.result.substring(0, 7000));
-    r.onerror = rej;
-    r.readAsText(f);
-  });
-}
-
-function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
-
-/* ════════════════════════════════
-   CLAUDE API CALLS
-════════════════════════════════ */
-async function claudeCall(prompt, maxTok) {
-  const res = await fetch('https://api.anthropic.com/v1/messages', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      model: 'claude-sonnet-4-20250514',
-      max_tokens: maxTok || 800,
-      messages: [{ role: 'user', content: prompt }]
-    })
-  });
-  const d = await res.json();
-  return (d.content || []).map(c => c.text || '').join('').replace(/```json|```/g, '').trim();
-}
-
-async function doProfileCall(txt) {
+  // Step 1 — Read file
+  setStep(0); setPct(5);
+  log('Reading: ' + uploadedFile.name, 'inf');
+  let resumeText = '';
   try {
-    const raw = await claudeCall(
-      `Analyze this resume and return ONLY valid JSON (no markdown, no explanation):
-{"name":"Full Name or Professional","title":"Current/Target Role","yearsExp":"X years","topSkills":["s1","s2","s3","s4","s5"],"industries":["i1","i2"],"education":"Degree summary","seniority":"Junior|Mid|Senior|Lead|Director|VP","location":"City if mentioned"}
-Resume: ${txt || 'File: ' + uploadedFile.name}`, 700);
-    profile = JSON.parse(raw);
-  } catch (_) {
-    profile = { name: 'Your Profile', title: 'Senior Professional', yearsExp: '13+ years', topSkills: ['Leadership', 'Strategy', 'Analytics', 'Technology', 'Operations'], seniority: 'Senior', industries: ['Technology', 'Business'] };
+    resumeText = await readFile(uploadedFile);
+    log('Extracted ' + resumeText.length + ' characters', 'ok');
+  } catch(e) {
+    log('Read error: ' + e.message, 'er');
+    resumeText = '[File: ' + uploadedFile.name + ']';
   }
-}
+  await tick(400);
 
-async function doJobsCall(txt) {
+  // Step 2 — Profile extraction via Claude
+  setStep(1); setPct(20);
+  log('Calling Claude API — extracting profile…', 'inf');
   try {
-    const raw = await claudeCall(
-      `You are an expert AI recruiter for India's job market. Based on this resume, generate exactly 22 highly relevant job opportunities for ${minExp} experienced professionals in India.
-
-Return ONLY a valid JSON array — zero markdown, zero text before or after the array:
-[{"id":1,"title":"Exact Job Title","company":"Real Company Name","type":"MNC|Startup|Consulting|Scale-up","location":"City, India or Remote","salary":"XX-YY LPA","salaryAbove35":true,"fitScore":82,"probability":"high|medium|stretch","postedDaysAgo":3,"skills":["skill1","skill2","skill3"],"applyUrl":"https://realcareerpage.com","reason":"One sentence why this matches the resume.","sector":"Tech|Fintech|Ecommerce|Consulting|etc"}]
-
-STRICT RULES:
-- Exactly 8 high probability (fitScore 75–95), 8 medium (55–74), 6 stretch (45–54)
-- At least 8 roles with salaryAbove35: true (salary ≥ 35 LPA)
-- Company mix: 5 global MNCs (Google, Microsoft, Amazon, McKinsey, BCG, Deloitte, Goldman Sachs, etc.), 5 Indian unicorn startups (Razorpay, Zepto, CRED, Meesho, Groww, etc.), 4 scale-ups (Flipkart, PhonePe, Swiggy, Nykaa, etc.), 4 consulting (Deloitte, EY, Accenture, KPMG, etc.), 4 others (FMCG, banking, healthcare, manufacturing, etc.)
-- City mix: Bangalore, Mumbai, Delhi NCR, Hyderabad, Pune, Chennai, Remote
-- All posted within last 10 days
-- applyUrl must be a real, working career page URL for that company
-- reason must specifically mention skills from the resume
-
-Resume content: ${txt || JSON.stringify(profile)}
-Candidate experience target: ${minExp}`, 4000);
-    allJobs = JSON.parse(raw);
-  } catch (_) {
-    allJobs = fallbackJobs();
+    profile = await extractProfile(resumeText);
+    log('Profile: ' + profile.name + ' · ' + profile.seniority + ' · Skills: ' + (profile.topSkills||[]).slice(0,3).join(', '), 'ok');
+  } catch(e) {
+    log('Profile error: ' + e.message, 'er');
+    showError('Profile Extraction Failed', e.message); return;
   }
+  setStep(2); setPct(35); await tick(300);
+
+  // Steps 3-7 — Job matching (animate steps while API runs)
+  setStep(3); setPct(45);
+  log('Calling Claude API — generating personalised jobs for ' + profile.name + '…', 'inf');
+  log('Using skills: ' + (profile.topSkills||[]).join(', '), 'inf');
+
+  const jobsPromise = fetchJobs(resumeText);
+  for (let i = 4; i <= 6; i++) { await tick(900); setStep(i); setPct(45 + i*7); }
+
+  let jobs;
+  try {
+    jobs = await jobsPromise;
+    log('Received ' + jobs.length + ' unique personalised job matches!', 'ok');
+  } catch(e) {
+    log('Job fetch error: ' + e.message, 'er');
+    showError('Job Matching Failed', e.message); return;
+  }
+
+  // Step 8 — Done
+  setStep(7); setPct(100);
+  STEPS.forEach((_,i) => { const el=document.getElementById('sr'+i); if(el) el.className='srow done'; });
+  log('✅ Complete! Rendering ' + jobs.length + ' jobs…', 'ok');
+  await tick(500);
+
+  allJobs = jobs;
   renderResults();
 }
 
-/* ════════════════════════════════
-   RENDER RESULTS
-════════════════════════════════ */
-function renderResults() {
-  // Stats
-  const high = allJobs.filter(j => j.probability === 'high').length;
-  const sal  = allJobs.filter(j => j.salaryAbove35).length;
-  const avg  = Math.round(allJobs.reduce((a, j) => a + j.fitScore, 0) / allJobs.length);
-  document.getElementById('stTotal').textContent = allJobs.length;
-  document.getElementById('stHigh').textContent  = high;
-  document.getElementById('stSal').textContent   = sal;
-  document.getElementById('stAvg').textContent   = avg + '%';
-  document.getElementById('statsRow').style.display = 'flex';
-  document.getElementById('filterRow').style.display = 'flex';
-  document.getElementById('jobsMeta').textContent = allJobs.length + ' matched · Posted last 10 days';
+/* ── FILE READING ── */
+async function readFile(file) {
+  const ext = file.name.split('.').pop().toLowerCase();
+  if (ext === 'txt') return readAsText(file);
+  if (ext === 'docx' || ext === 'doc') {
+    const txt = await readAsText(file);
+    const clean = txt.replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim();
+    return clean.length > 200 ? clean.substring(0,8000) : '[DOCX: ' + file.name + ' — try saving as .txt for better results]';
+  }
+  if (ext === 'pdf') {
+    log('PDF detected — loading PDF.js extractor…', 'inf');
+    try {
+      const text = await extractPdfWithPdfJs(file);
+      if (text && text.trim().length > 200) { log('PDF text extracted via PDF.js: ' + text.length + ' chars', 'ok'); return text.substring(0,8000); }
+    } catch(e) { log('PDF.js failed: ' + e.message + ' — trying raw extraction…', 'er'); }
+    const raw = await extractPdfRaw(file);
+    if (raw.length > 300) { log('PDF raw extraction: ' + raw.length + ' chars', 'ok'); return raw.substring(0,8000); }
+    log('⚠️ Could not extract PDF text — AI will work from filename context', 'er');
+    return `[PDF Resume: "${file.name}". Could not extract text — likely image-based or scanned PDF. Please upload a TXT version for best results. AI will infer from any available context.]`;
+  }
+  return readAsText(file);
+}
 
+function readAsText(file) {
+  return new Promise((res,rej) => {
+    const r = new FileReader();
+    r.onload = e => res(e.target.result);
+    r.onerror = () => rej(new Error('Could not read file'));
+    r.readAsText(file,'UTF-8');
+  });
+}
+
+function readAsBuffer(file) {
+  return new Promise((res,rej) => {
+    const r = new FileReader();
+    r.onload = e => res(e.target.result);
+    r.onerror = () => rej(new Error('Could not read file'));
+    r.readAsArrayBuffer(file);
+  });
+}
+
+async function extractPdfWithPdfJs(file) {
+  if (!window.pdfjsLib) {
+    await new Promise((res,rej) => {
+      const s = document.createElement('script');
+      s.src = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js';
+      s.onload = res; s.onerror = rej; document.head.appendChild(s);
+    });
+    window.pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+  }
+  const buf = await readAsBuffer(file);
+  const pdf = await window.pdfjsLib.getDocument({data: buf}).promise;
+  let text = '';
+  for (let i = 1; i <= pdf.numPages; i++) {
+    const page = await pdf.getPage(i);
+    const content = await page.getTextContent();
+    text += content.items.map(item => item.str).join(' ') + '\n';
+  }
+  return text;
+}
+
+async function extractPdfRaw(file) {
+  const buf = await readAsBuffer(file);
+  const bytes = new Uint8Array(buf);
+  let result = '', cur = '';
+  for (let i = 0; i < bytes.length; i++) {
+    const c = bytes[i];
+    if (c >= 32 && c <= 126) { cur += String.fromCharCode(c); }
+    else { if (cur.length > 4) result += cur + ' '; cur = ''; }
+  }
+  return result.replace(/\s{3,}/g,' ').replace(/[^\x20-\x7E]/g,' ').trim();
+}
+
+/* ── CLAUDE API ── */
+async function callClaude(prompt, maxTokens) {
+  const key = document.getElementById('apiKey').value.trim();
+  if (!key) throw new Error('No API key. Please enter your Anthropic API key on the Home screen.');
+  log('→ Sending API request (' + maxTokens + ' max tokens)…', 'inf');
+  const res = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'x-api-key': key,
+      'anthropic-version': '2023-06-01',
+      'anthropic-dangerous-direct-browser-access': 'true'
+    },
+    body: JSON.stringify({
+      model: 'claude-sonnet-4-20250514',
+      max_tokens: maxTokens,
+      messages: [{ role: 'user', content: prompt }]
+    })
+  });
+  if (!res.ok) {
+    let msg = 'API Error ' + res.status;
+    try { const b = await res.json(); msg += ': ' + (b.error?.message || JSON.stringify(b)); } catch(_) {}
+    throw new Error(msg);
+  }
+  const data = await res.json();
+  log('← Response received ✓', 'ok');
+  return (data.content||[]).map(c=>c.text||'').join('').replace(/```json\n?|```\n?/g,'').trim();
+}
+
+/* ── PROFILE EXTRACTION ── */
+async function extractProfile(txt) {
+  const raw = await callClaude(
+`You are a precise resume parser. Read the resume below carefully and extract ALL real information.
+Return ONLY valid JSON — zero markdown, zero explanation:
+{
+  "name": "Full name exactly as written, or Professional if not found",
+  "title": "Their actual current or most recent job title",
+  "yearsExp": "Total years of experience e.g. 12 years",
+  "topSkills": ["List 6-8 real skills actually mentioned in this resume"],
+  "industries": ["1-3 real industries from their work history"],
+  "education": "Actual highest degree and institution from resume",
+  "seniority": "Junior|Mid-level|Senior|Lead|Manager|Director|VP|C-level",
+  "location": "City if mentioned in resume",
+  "keyAchievements": ["2-3 real measurable achievements or metrics from this resume"],
+  "preferredRoles": ["2-3 roles that fit this person based on their actual experience"]
+}
+Extract only what is actually in the resume. Do not invent or genericise.
+RESUME:
+${txt}`, 900);
+  return JSON.parse(raw);
+}
+
+/* ── JOB MATCHING ── */
+async function fetchJobs(txt) {
+  const p = profile;
+  const raw = await callClaude(
+`You are India's top AI recruiter (2025). Generate PERSONALISED job matches for this specific candidate.
+
+CANDIDATE PROFILE (extracted from their actual resume):
+- Name: ${p.name}
+- Current/Recent Title: ${p.title}
+- Total Experience: ${p.yearsExp} | Seniority: ${p.seniority}
+- Skills from resume: ${(p.topSkills||[]).join(', ')}
+- Industries worked in: ${(p.industries||[]).join(', ')}
+- Education: ${p.education}
+- Key achievements: ${(p.keyAchievements||[]).join(' | ')}
+- Best suited for: ${(p.preferredRoles||[]).join(', ')}
+- Min experience filter: ${minExp}
+
+THEIR ACTUAL RESUME (use this for deep personalisation):
+${txt.substring(0,3500)}
+
+Generate exactly 22 job opportunities in India that are GENUINELY relevant to THIS candidate's background — not generic senior roles. Each job must reflect their actual skills and industry.
+
+Return ONLY a valid JSON array, zero markdown, nothing else before or after the []:
+[{
+  "id": 1,
+  "title": "Specific role matching their background",
+  "company": "Real Indian or MNC company currently hiring",
+  "type": "MNC|Startup|Consulting|Scale-up|PSU",
+  "location": "City, India or Remote",
+  "salary": "XX-YY LPA",
+  "salaryAbove35": true,
+  "fitScore": 85,
+  "probability": "high|medium|stretch",
+  "postedDaysAgo": 3,
+  "skills": ["skill from their resume", "skill2", "skill3"],
+  "applyUrl": "https://real-company-careers-url.com",
+  "reason": "Specific reason citing their actual skills/companies/achievements",
+  "sector": "Industry"
+}]
+
+MANDATORY RULES:
+1. fitScore + reason MUST reference THIS candidate's actual skills/achievements from resume
+2. 8 high (75-95), 8 medium (55-74), 6 stretch (45-54)
+3. At least 8 with salaryAbove35:true
+4. Mix: MNCs, startups (unicorns), consulting firms, scale-ups — relevant to their field
+5. Use REAL company career page URLs only
+6. postedDaysAgo must be 1-10
+7. Pick companies in sectors where this person's background adds real value
+8. If their background is non-tech, do NOT generate IT/software jobs`, 4500);
+
+  const jobs = JSON.parse(raw);
+  if (!Array.isArray(jobs) || jobs.length < 5) throw new Error('AI returned invalid job list. Try again.');
+  return jobs;
+}
+
+/* ── ERROR ── */
+function showError(title, msg) {
+  document.getElementById('slist').innerHTML = `
+    <div class="errbox">
+      <h3>⚠️ ${title}</h3>
+      <p>Here is the exact error so you can fix it:</p>
+      <code>${msg}</code>
+      <p><strong>Common fixes:</strong><br/>
+      • API key must start with <strong>sk-ant-</strong><br/>
+      • Check credits at <strong>console.anthropic.com</strong><br/>
+      • PDF not reading? Save resume as <strong>.txt</strong> and try again<br/>
+      • Check your internet connection</p>
+      <button class="retrybtn" onclick="nav('home')">← Go Back &amp; Retry</button>
+    </div>`;
+}
+
+/* ── RENDER RESULTS ── */
+function renderResults() {
+  const high = allJobs.filter(j=>j.probability==='high').length;
+  const sal  = allJobs.filter(j=>j.salaryAbove35).length;
+  const avg  = Math.round(allJobs.reduce((a,j)=>a+(j.fitScore||0),0)/allJobs.length);
+  document.getElementById('stT').textContent = allJobs.length;
+  document.getElementById('stH').textContent = high;
+  document.getElementById('stS').textContent = sal;
+  document.getElementById('stA').textContent = avg + '%';
+  document.getElementById('statsrow').style.display = 'flex';
+  document.getElementById('frow').style.display = 'flex';
+  document.getElementById('jm').textContent = allJobs.length + ' personalised matches for ' + (profile.name||'you') + ' · Posted last 10 days';
   renderJobList(allJobs);
   renderProfile();
   nav('jobs');
+  toast('🎯 ' + allJobs.length + ' unique jobs found for YOUR profile!');
 }
 
-function filter(type, btn) {
-  document.querySelectorAll('.fchip').forEach(b => b.classList.remove('on'));
-  btn.classList.add('on');
-  const map = {
-    all: () => allJobs,
-    high: () => allJobs.filter(j => j.probability === 'high'),
-    medium: () => allJobs.filter(j => j.probability === 'medium'),
-    stretch: () => allJobs.filter(j => j.probability === 'stretch'),
-    salary: () => allJobs.filter(j => j.salaryAbove35),
-    mnc: () => allJobs.filter(j => j.type === 'MNC'),
-    startup: () => allJobs.filter(j => j.type === 'Startup'),
-  };
-  renderJobList((map[type] || map.all)());
+function filt(type, btn) {
+  document.querySelectorAll('.fchip').forEach(b=>b.classList.remove('on')); btn.classList.add('on');
+  const m = { all:()=>allJobs, high:()=>allJobs.filter(j=>j.probability==='high'), medium:()=>allJobs.filter(j=>j.probability==='medium'), stretch:()=>allJobs.filter(j=>j.probability==='stretch'), salary:()=>allJobs.filter(j=>j.salaryAbove35), mnc:()=>allJobs.filter(j=>j.type==='MNC'), startup:()=>allJobs.filter(j=>j.type==='Startup') };
+  renderJobList((m[type]||m.all)());
 }
 
 function renderJobList(jobs) {
-  const grps = {
-    high:    jobs.filter(j => j.probability === 'high'),
-    medium:  jobs.filter(j => j.probability === 'medium'),
-    stretch: jobs.filter(j => j.probability === 'stretch'),
-  };
-  const labels = { high: '🟢 High Probability', medium: '🟡 Medium Probability', stretch: '🔴 Stretch Roles' };
-  const cls    = { high: 'hcard', medium: '', stretch: 'scard' };
+  const grps = { high:jobs.filter(j=>j.probability==='high'), medium:jobs.filter(j=>j.probability==='medium'), stretch:jobs.filter(j=>j.probability==='stretch') };
+  const lbl  = { high:'🟢 High Probability', medium:'🟡 Medium Probability', stretch:'🔴 Stretch Roles' };
+  const cls  = { high:'hc', medium:'', stretch:'sc' };
   let html = '';
-  for (const [k, list] of Object.entries(grps)) {
+  for (const [k,list] of Object.entries(grps)) {
     if (!list.length) continue;
-    html += `<div class="sec-label">${labels[k]}<span class="sec-count">${list.length}</span></div>`;
-    html += list.map(j => jobCard(j, cls[k])).join('');
+    html += `<div class="slabel">${lbl[k]}<span class="scnt">${list.length}</span></div>`;
+    html += list.map(j => card(j, cls[k])).join('');
   }
-  if (!html) html = `<div class="empty-box"><div class="empty-ico">🔍</div><div class="empty-h">No jobs here</div><div class="empty-p">Try a different filter above.</div></div>`;
+  if (!html) html = `<div class="empt"><div class="ei">🔍</div><div class="eh">No results</div><div class="ep">Try a different filter.</div></div>`;
   document.getElementById('jobsList').innerHTML = html;
 }
 
-function scoreColor(s) { return s >= 75 ? '#10b981' : s >= 60 ? '#f59e0b' : '#ef4444'; }
+function scoreColor(s) { return s>=75?'#10b981':s>=60?'#f59e0b':'#ef4444'; }
 
-function jobCard(j, extra) {
-  const c = scoreColor(j.fitScore);
-  const R = 18, C = 2 * Math.PI * R, D = (j.fitScore / 100) * C;
-  return `<div class="jcard ${extra}">
-    <div class="jcard-top">
-      <div class="jcard-left">
-        <div class="jtitle">${j.title}</div>
-        <div class="jcompany">${j.company}<span class="jtype-badge">${j.type}</span></div>
+function card(j, cls) {
+  const c=scoreColor(j.fitScore||50), R=18, C=2*Math.PI*R, D=((j.fitScore||50)/100)*C;
+  return `<div class="jcard ${cls}">
+    <div class="jtop">
+      <div class="jleft">
+        <div class="jtitle">${j.title||'Role'}</div>
+        <div class="jco">${j.company||'Company'}<span class="jbadge">${j.type||''}</span></div>
       </div>
-      <div class="score-ring">
+      <div class="sring">
         <svg viewBox="0 0 46 46" fill="none">
           <circle cx="23" cy="23" r="${R}" stroke="rgba(255,255,255,0.07)" stroke-width="3"/>
           <circle cx="23" cy="23" r="${R}" stroke="${c}" stroke-width="3"
             stroke-dasharray="${D.toFixed(1)} ${C.toFixed(1)}"
             stroke-linecap="round" transform="rotate(-90 23 23)"/>
         </svg>
-        <div class="score-num" style="color:${c}">${j.fitScore}%</div>
+        <div class="sval" style="color:${c}">${j.fitScore||'?'}%</div>
       </div>
     </div>
     <div class="jmeta">
-      <span class="mtag">📍 ${j.location}</span>
-      <span class="mtag ${j.salaryAbove35 ? 'mgrn' : ''}">💰 ${j.salary}</span>
-      <span class="mtag mgld">🏢 ${j.sector}</span>
-      <span class="mtag">🕐 ${j.postedDaysAgo}d ago</span>
+      <span class="mt">📍 ${j.location||'India'}</span>
+      <span class="mt ${j.salaryAbove35?'g':''}">💰 ${j.salary||'—'}</span>
+      <span class="mt o">🏢 ${j.sector||'—'}</span>
+      <span class="mt">🕐 ${j.postedDaysAgo||'?'}d ago</span>
     </div>
-    <div class="jskills">${(j.skills || []).map(s => `<span class="jtag">${s}</span>`).join('')}</div>
-    <div class="jreason">${j.reason}</div>
-    <div class="jactions">
-      <a class="apply-m" href="${j.applyUrl}" target="_blank" rel="noopener noreferrer">Apply Now ↗</a>
-      <button class="bk-btn" onclick="toggleSave(this)" aria-label="Bookmark">🔖</button>
+    <div class="jskills">${(j.skills||[]).map(s=>`<span class="sk">${s}</span>`).join('')}</div>
+    <div class="jreason">${j.reason||''}</div>
+    <div class="jacts">
+      <a class="abtn" href="${j.applyUrl||'#'}" target="_blank" rel="noopener noreferrer">Apply Now ↗</a>
+      <button class="bkbtn" onclick="toggleSave(this)">🔖</button>
     </div>
   </div>`;
 }
 
 function toggleSave(btn) {
-  btn.classList.toggle('saved');
-  btn.textContent = btn.classList.contains('saved') ? '✅' : '🔖';
-  toast(btn.classList.contains('saved') ? '✅ Job saved!' : 'Removed from saved');
+  btn.classList.toggle('sv'); btn.textContent = btn.classList.contains('sv') ? '✅' : '🔖';
+  toast(btn.classList.contains('sv') ? '✅ Job saved!' : 'Removed from saved');
 }
 
-/* ════════════════════════════════
-   PROFILE TAB
-════════════════════════════════ */
+/* ── PROFILE TAB ── */
 function renderProfile() {
   const p = profile;
-  const ini = (p.name || 'P').split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
-  const tags = [...(p.topSkills || []), ...(p.industries || []), p.education || '', p.location || ''].filter(Boolean);
+  const ini = (p.name||'P').split(' ').map(n=>n[0]).join('').substring(0,2).toUpperCase();
+  const tags = [...(p.topSkills||[]),...(p.industries||[]),p.education,p.location].filter(Boolean);
   const email = document.getElementById('emailF').value;
   document.getElementById('profContent').innerHTML = `
-    <div class="prof-top">
-      <div class="avatar">${ini}</div>
-      <div class="prof-name">${p.name || 'Your Profile'}</div>
-      <div class="prof-role">${p.title || ''} · ${p.seniority || 'Senior'}</div>
-      <div class="prof-row">
-        <div class="pnum"><div class="pnum-v">${(p.yearsExp || '—').replace(' years','')}</div><div class="pnum-l">Yrs Exp</div></div>
-        <div class="pnum"><div class="pnum-v">${allJobs.length}</div><div class="pnum-l">Jobs Found</div></div>
-        <div class="pnum"><div class="pnum-v">${allJobs.filter(j=>j.probability==='high').length}</div><div class="pnum-l">High Fit</div></div>
+    <div class="ptop">
+      <div class="ava">${ini}</div>
+      <div class="pname">${p.name||'Your Profile'}</div>
+      <div class="prole">${p.title||''} · ${p.seniority||''}</div>
+      <div class="prow">
+        <div class="pn"><div class="pnv">${(p.yearsExp||'—').replace(/ years?/,'')}</div><div class="pnl">Yrs Exp</div></div>
+        <div class="pn"><div class="pnv">${allJobs.length}</div><div class="pnl">Jobs Found</div></div>
+        <div class="pn"><div class="pnv">${allJobs.filter(j=>j.probability==='high').length}</div><div class="pnl">High Fit</div></div>
       </div>
     </div>
+    ${(p.keyAchievements||[]).length ? `<div class="pcard"><div class="pct">Key Achievements from Your Resume</div><div style="display:flex;flex-direction:column;gap:7px;">${(p.keyAchievements||[]).map(a=>`<div style="background:rgba(16,185,129,.07);border:1px solid rgba(16,185,129,.2);color:#34d399;border-radius:10px;padding:8px 12px;font-size:12px;line-height:1.5;">✦ ${a}</div>`).join('')}</div></div>` : ''}
+    <div class="pcard"><div class="pct">Extracted Skills &amp; Background</div><div class="ptags2">${tags.map(t=>`<span class="ptag2">${t}</span>`).join('')}</div></div>
     <div class="pcard">
-      <div class="pcard-t">Extracted Skills &amp; Profile</div>
-      <div class="ptags">${tags.map(t => `<span class="ptag">${t}</span>`).join('')}</div>
-    </div>
-    <div class="pcard">
-      <div class="pcard-t">Email Full Report</div>
-      <div style="font-size:13px;color:var(--text2);margin-bottom:8px;">Send all ${allJobs.length} matched jobs with fit scores, salaries &amp; apply links to:</div>
-      <div style="font-size:14px;color:var(--accent2);font-weight:700;margin-bottom:4px;">${email || 'your@email.com'}</div>
-      <button class="email-report-btn" onclick="sendReport()">📧 Send Full Report</button>
-      <div id="rptStatus"></div>
+      <div class="pct">Email Full Report</div>
+      <div style="font-size:12px;color:var(--text3);margin-bottom:10px;line-height:1.6;">Send all ${allJobs.length} personalised job matches with fit scores, salaries &amp; apply links to <strong style="color:var(--accent2)">${email}</strong></div>
+      <button class="rptbtn" onclick="sendReport()">📧 Compile &amp; Send Report</button>
+      <div id="rsts"></div>
     </div>`;
 }
 
 async function sendReport() {
   const email = document.getElementById('emailF').value;
-  const st = document.getElementById('rptStatus');
-  if (!email) { toast('Enter email on Home screen first'); return; }
-  st.textContent = '⏳ Compiling report...';
+  const st = document.getElementById('rsts');
+  if (!email) { toast('Enter email on Home screen'); return; }
+  st.textContent = '⏳ Compiling your report…'; st.style.color = 'var(--text3)';
   try {
-    await claudeCall(`Acknowledge receiving a job search report compilation request for ${email} with ${allJobs.length} India job matches. Reply in one line.`, 100);
+    await callClaude(`Acknowledge job report for ${email} with ${allJobs.length} personalised jobs for ${profile.name}. One sentence only.`, 80);
     st.style.color = '#34d399';
-    st.textContent = `✅ Report ready for ${email}. Note: auto-sending requires backend SMTP. Use the bookmark button to save jobs in the meantime.`;
-  } catch (_) {
+    st.textContent = `✅ Report compiled for ${email}. Note: direct email delivery requires a backend SMTP server. Use 🔖 to bookmark jobs in the meantime.`;
+  } catch(e) {
     st.style.color = '#fbbf24';
-    st.textContent = '⚠️ Compilation error. Please bookmark your preferred jobs using 🔖';
+    st.textContent = '⚠️ ' + e.message;
   }
 }
 
-/* ════════════════════════════════
-   PWA INSTALL
-════════════════════════════════ */
+/* ── PWA ── */
 window.addEventListener('beforeinstallprompt', e => {
-  e.preventDefault();
-  deferredInstall = e;
-  document.getElementById('install-btn').classList.add('visible');
+  e.preventDefault(); deferredInstall = e;
+  document.getElementById('ibtn').classList.add('vis');
 });
 function installApp() {
   if (!deferredInstall) return;
   deferredInstall.prompt();
   deferredInstall.userChoice.then(r => {
-    if (r.outcome === 'accepted') toast('🎉 App installed successfully!');
-    deferredInstall = null;
-    document.getElementById('install-btn').classList.remove('visible');
+    if (r.outcome==='accepted') toast('🎉 App installed!');
+    deferredInstall = null; document.getElementById('ibtn').classList.remove('vis');
   });
 }
-window.addEventListener('appinstalled', () => toast('🎉 Installed on your home screen!'));
-
-/* Inline service worker via blob — no external sw.js file needed */
 if ('serviceWorker' in navigator) {
-  const swCode = `
-    const CACHE = 'ai-recruiter-v1';
-    self.addEventListener('install', e => {
-      self.skipWaiting();
-    });
-    self.addEventListener('activate', e => { self.clients.claim(); });
-    self.addEventListener('fetch', e => {
-      if (e.request.method !== 'GET') return;
-      if (e.request.url.includes('api.anthropic.com')) return;
-      e.respondWith(
-        fetch(e.request).then(r => {
-          const c = r.clone();
-          caches.open(CACHE).then(cache => cache.put(e.request, c));
-          return r;
-        }).catch(() => caches.match(e.request))
-      );
-    });`;
-  const blob = new Blob([swCode], { type: 'application/javascript' });
-  const swUrl = URL.createObjectURL(blob);
-  navigator.serviceWorker.register(swUrl).catch(() => {});
+  const sw = `self.addEventListener('install',()=>self.skipWaiting());self.addEventListener('activate',()=>self.clients.claim());self.addEventListener('fetch',e=>{if(e.request.method!=='GET'||e.request.url.includes('anthropic'))return;e.respondWith(fetch(e.request).catch(()=>caches.match(e.request)));});`;
+  navigator.serviceWorker.register(URL.createObjectURL(new Blob([sw],{type:'application/javascript'}))).catch(()=>{});
 }
 
-/* ════════════════════════════════
-   TOAST
-════════════════════════════════ */
+/* ── TOAST ── */
 function toast(msg) {
   const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  clearTimeout(t._tid);
-  t._tid = setTimeout(() => t.classList.remove('show'), 2600);
-}
-
-/* ════════════════════════════════
-   FALLBACK JOB DATA
-════════════════════════════════ */
-function fallbackJobs() {
-  return [
-    {id:1,title:'Director of Engineering',company:'Google India',type:'MNC',location:'Bangalore',salary:'80–120 LPA',salaryAbove35:true,fitScore:88,probability:'high',postedDaysAgo:2,skills:['Engineering Leadership','Cloud','System Design'],applyUrl:'https://careers.google.com/jobs/results/?q=director+engineering+india',reason:'Strong engineering leadership aligns with Google India\'s expansion.',sector:'Tech'},
-    {id:2,title:'VP of Product',company:'Razorpay',type:'Startup',location:'Bangalore',salary:'60–90 LPA',salaryAbove35:true,fitScore:85,probability:'high',postedDaysAgo:3,skills:['Product Strategy','Fintech','GTM'],applyUrl:'https://razorpay.com/jobs/',reason:'Razorpay needs senior product leadership for its next growth phase.',sector:'Fintech'},
-    {id:3,title:'Senior Manager – Strategy',company:'McKinsey & Co.',type:'Consulting',location:'Mumbai',salary:'55–80 LPA',salaryAbove35:true,fitScore:82,probability:'high',postedDaysAgo:1,skills:['Strategy','Analytics','Client Management'],applyUrl:'https://www.mckinsey.com/careers/search-jobs',reason:'Strategic profile matches McKinsey India\'s practice growth.',sector:'Consulting'},
-    {id:4,title:'Head of Data Science',company:'Meesho',type:'Startup',location:'Bangalore',salary:'45–70 LPA',salaryAbove35:true,fitScore:79,probability:'high',postedDaysAgo:4,skills:['Machine Learning','Python','Team Leadership'],applyUrl:'https://meesho.com/jobs',reason:'Meesho\'s hyper-growth stage needs strong data science leadership.',sector:'Ecommerce'},
-    {id:5,title:'Principal Engineer',company:'Microsoft India',type:'MNC',location:'Hyderabad',salary:'50–75 LPA',salaryAbove35:true,fitScore:83,probability:'high',postedDaysAgo:2,skills:['Azure','Distributed Systems','Architecture'],applyUrl:'https://careers.microsoft.com/us/en/search-results?keywords=india',reason:'Microsoft Hyderabad is a major global engineering hub.',sector:'Tech'},
-    {id:6,title:'AVP Engineering',company:'Zepto',type:'Startup',location:'Mumbai',salary:'40–65 LPA',salaryAbove35:true,fitScore:77,probability:'high',postedDaysAgo:5,skills:['Backend','Scalability','Team Leadership'],applyUrl:'https://www.zeptonow.com/careers',reason:'Zepto\'s quick-commerce scale requires strong engineering leadership.',sector:'Ecommerce'},
-    {id:7,title:'Senior Director – Operations',company:'Amazon India',type:'MNC',location:'Bangalore',salary:'70–100 LPA',salaryAbove35:true,fitScore:80,probability:'high',postedDaysAgo:3,skills:['Operations','Supply Chain','P&L Management'],applyUrl:'https://www.amazon.jobs/en/search?base_query=senior+director+india',reason:'Amazon India\'s logistics expansion needs senior operations leaders.',sector:'Ecommerce'},
-    {id:8,title:'Head of Growth',company:'CRED',type:'Startup',location:'Bangalore',salary:'45–65 LPA',salaryAbove35:true,fitScore:76,probability:'high',postedDaysAgo:6,skills:['Growth Hacking','Performance Marketing','Analytics'],applyUrl:'https://careers.cred.club/',reason:'CRED is aggressively scaling its premium financial products.',sector:'Fintech'},
-    {id:9,title:'Senior Manager – Technology',company:'Deloitte India',type:'Consulting',location:'Delhi NCR',salary:'30–45 LPA',salaryAbove35:false,fitScore:72,probability:'medium',postedDaysAgo:7,skills:['Digital Transformation','SAP','Consulting'],applyUrl:'https://apply.deloitte.com/careers/SearchJobs/?523=India',reason:'Deloitte\'s tech consulting practice is scaling across India.',sector:'Consulting'},
-    {id:10,title:'Engineering Manager',company:'Flipkart',type:'Scale-up',location:'Bangalore',salary:'35–55 LPA',salaryAbove35:true,fitScore:74,probability:'medium',postedDaysAgo:4,skills:['Java','Microservices','Agile'],applyUrl:'https://www.flipkartcareers.com/',reason:'Flipkart is continuously scaling its core technology platform.',sector:'Ecommerce'},
-    {id:11,title:'Product Director – Lending',company:'PhonePe',type:'Scale-up',location:'Bangalore',salary:'50–75 LPA',salaryAbove35:true,fitScore:71,probability:'medium',postedDaysAgo:8,skills:['Fintech','Product Management','Lending'],applyUrl:'https://www.phonepe.com/careers/',reason:'PhonePe is expanding aggressively into credit and lending.',sector:'Fintech'},
-    {id:12,title:'Manager – Strategy',company:'BCG India',type:'Consulting',location:'Mumbai',salary:'40–60 LPA',salaryAbove35:true,fitScore:68,probability:'medium',postedDaysAgo:5,skills:['Strategy','Business Development','Analytics'],applyUrl:'https://careers.bcg.com/',reason:'BCG India\'s growing practice needs senior strategy consultants.',sector:'Consulting'},
-    {id:13,title:'Senior Software Architect',company:'Infosys',type:'MNC',location:'Pune',salary:'28–42 LPA',salaryAbove35:false,fitScore:65,probability:'medium',postedDaysAgo:3,skills:['Architecture','Cloud','Java'],applyUrl:'https://career.infosys.com/joblist',reason:'Infosys is modernizing its platform and needs senior architects.',sector:'Tech'},
-    {id:14,title:'Head of AI / ML',company:'Swiggy',type:'Scale-up',location:'Bangalore',salary:'55–80 LPA',salaryAbove35:true,fitScore:70,probability:'medium',postedDaysAgo:6,skills:['ML','Deep Learning','Python'],applyUrl:'https://careers.swiggy.com/',reason:'Swiggy\'s AI investments in recommendations and logistics are growing.',sector:'Foodtech'},
-    {id:15,title:'VP Engineering – Platform',company:'Ola',type:'Scale-up',location:'Bangalore',salary:'60–85 LPA',salaryAbove35:true,fitScore:63,probability:'medium',postedDaysAgo:9,skills:['Platform Engineering','Scalability','Leadership'],applyUrl:'https://ola.skillate.com/',reason:'Ola is rebuilding its platform for EV and new mobility verticals.',sector:'Mobility'},
-    {id:16,title:'Senior Director – Consulting',company:'Accenture India',type:'MNC',location:'Bangalore',salary:'80–120 LPA',salaryAbove35:true,fitScore:58,probability:'medium',postedDaysAgo:7,skills:['Technology Leadership','Client Management','P&L'],applyUrl:'https://www.accenture.com/in-en/careers/jobsearch',reason:'Accenture India seeks senior leaders for its growing tech unit.',sector:'Consulting'},
-    {id:17,title:'CTO – Series B Startup',company:'Krutrim AI',type:'Startup',location:'Bangalore',salary:'80–150 LPA + Equity',salaryAbove35:true,fitScore:52,probability:'stretch',postedDaysAgo:2,skills:['CTO','AI / ML','Startup Leadership'],applyUrl:'https://www.linkedin.com/company/krutrim-ai/jobs/',reason:'Ola\'s AI spin-off needs strong tech leadership — high impact & equity.',sector:'AI'},
-    {id:18,title:'MD – Digital Banking',company:'HDFC Bank',type:'MNC',location:'Mumbai',salary:'90–140 LPA',salaryAbove35:true,fitScore:49,probability:'stretch',postedDaysAgo:4,skills:['Digital Banking','Technology Strategy','MD Level'],applyUrl:'https://www.hdfcbank.com/content/bbp/repositories/723fb80a-2dde-42a3-9793-7ae1be57c87f/?folderPath=/Footer/Careers',reason:'HDFC Bank\'s digital transformation drive needs senior tech executives.',sector:'Banking'},
-    {id:19,title:'Chief Product Officer',company:'Groww',type:'Scale-up',location:'Bangalore',salary:'100–180 LPA',salaryAbove35:true,fitScore:48,probability:'stretch',postedDaysAgo:3,skills:['CPO','Fintech','Product Vision'],applyUrl:'https://groww.in/p/careers',reason:'Groww, India\'s fastest-growing investment app, is expanding to credit.',sector:'Fintech'},
-    {id:20,title:'Partner – Technology',company:'EY India',type:'Consulting',location:'Mumbai',salary:'75–120 LPA',salaryAbove35:true,fitScore:50,probability:'stretch',postedDaysAgo:6,skills:['Partner Level','Technology Advisory','Business Development'],applyUrl:'https://careers.ey.com/ey/search/?q=partner+technology&location=India',reason:'EY India is growing its technology consulting practice with senior partners.',sector:'Consulting'},
-    {id:21,title:'Head of Engineering',company:'Nykaa',type:'Scale-up',location:'Mumbai',salary:'40–60 LPA',salaryAbove35:true,fitScore:67,probability:'medium',postedDaysAgo:8,skills:['Engineering','eCommerce','Team Leadership'],applyUrl:'https://jobs.nykaa.com/',reason:'Nykaa is scaling its tech team for beauty and fashion verticals.',sector:'Ecommerce'},
-    {id:22,title:'Senior Director Product',company:'Juspay',type:'Startup',location:'Bangalore',salary:'45–70 LPA',salaryAbove35:true,fitScore:73,probability:'medium',postedDaysAgo:5,skills:['Payments','Product Strategy','Fintech'],applyUrl:'https://juspay.in/careers',reason:'Juspay powers payments for India\'s top apps and is now going global.',sector:'Fintech'},
-  ];
+  t.textContent = msg; t.classList.add('show');
+  clearTimeout(t._t); t._t = setTimeout(()=>t.classList.remove('show'), 2800);
 }
 </script>
 </body>
